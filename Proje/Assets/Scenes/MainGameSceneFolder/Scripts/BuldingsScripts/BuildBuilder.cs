@@ -22,6 +22,7 @@ public class BuildBuilder : MonoBehaviour
     public LabPanelController labPanelController;
     public BarracksPanelController barracksPanelController;
     public HospitalPanelController hospitalPanelController;
+    public CastlePanelController castlePanelController;
 
     public static bool checkResources(Building building) // Artýk Building türü kabul ediliyor
     {
@@ -1418,6 +1419,102 @@ public void BuildDefenseWorkshop()
 
 
 
+
+    public void UpgradeCastle()
+    {
+        // Zaten var olan demirci nesnesini kullanmak için kontrol edin
+        Castle castle = GetComponent<Castle>();
+
+        if (!Castle.wasCastleCreated)
+        {
+            castle = gameObject.AddComponent<Castle>();
+
+            if (checkResources(castle))
+            {
+                // Kaynaklarý azaltýn
+                Kingdom.myKingdom.GoldAmount -= castle.buildGoldCost;
+                Kingdom.myKingdom.StoneAmount -= castle.buildStoneCost;
+                Kingdom.myKingdom.WoodAmount -= castle.buildTimberCost;
+                Kingdom.myKingdom.IronAmount -= castle.buildIronCost;
+                Kingdom.myKingdom.FoodAmount -= castle.buildFoodCost;
+
+                buildButton.enabled = false;
+
+                StartCoroutine(progressBarController.CastleIsFinished(castle, (isFinished) =>
+                {
+                    if (isFinished)
+                    {
+                        Castle.wasCastleCreated = true;
+
+                        Castle.buildLevel = 2;
+                       //Özelliklerini arttýr
+                        castle.UpdateCosts(); // Maliyetleri güncelle
+                        buildButton.enabled = true;
+                        castlePanelController.refreshCastle();
+                    }
+                    else
+                    {
+                        // Kaynaklarý iade et
+                        Kingdom.myKingdom.GoldAmount += castle.buildGoldCost;
+                        Kingdom.myKingdom.StoneAmount += castle.buildStoneCost;
+                        Kingdom.myKingdom.WoodAmount += castle.buildTimberCost;
+                        Kingdom.myKingdom.IronAmount += castle.buildIronCost;
+                        Kingdom.myKingdom.FoodAmount += castle.buildFoodCost;
+                        buildButton.enabled = true;
+                    }
+                }));
+            }
+            else
+            {
+                Debug.Log("Yeterli kaynak bulunmamaktadýr");
+            }
+        }
+        else
+        {
+            
+
+            if (Castle.buildLevel == 2)
+            {             
+                if (checkResources(castle))
+                {
+                    Kingdom.myKingdom.GoldAmount -= castle.buildGoldCost;
+                    Kingdom.myKingdom.StoneAmount -= castle.buildStoneCost;
+                    Kingdom.myKingdom.WoodAmount -= castle.buildTimberCost;
+                    Kingdom.myKingdom.IronAmount -= castle.buildIronCost;
+                    Kingdom.myKingdom.FoodAmount -= castle.buildFoodCost;
+
+                    buildButton.enabled = false;
+
+                    StartCoroutine(progressBarController.CastleIsFinished(castle, (isFinished) =>
+                    {
+                        if (isFinished)
+                        {
+                            // Gerekli iþlemleri yap
+
+                            Castle.buildLevel++;
+                           //Gerekeni Yap
+                            castlePanelController.refreshCastle();
+                            Destroy(buildButton.gameObject);
+                        }
+                        else
+                        {
+                            // Kaynaklarý iade et
+                            Kingdom.myKingdom.GoldAmount += castle.buildGoldCost;
+                            Kingdom.myKingdom.StoneAmount += castle.buildStoneCost;
+                            Kingdom.myKingdom.WoodAmount += castle.buildTimberCost;
+                            Kingdom.myKingdom.IronAmount += castle.buildIronCost;
+                            Kingdom.myKingdom.FoodAmount += castle.buildFoodCost;
+                            buildButton.enabled = true;
+                        }
+                    }));
+                }
+            }
+            else
+            {
+                Debug.Log("Bir sorun var gibi duruyor 'BuildBuilder' scriptindeki BuildBlacksmith fonksiyonunu kontrol ediniz.");
+            }
+        }
+    }
 
 }
 

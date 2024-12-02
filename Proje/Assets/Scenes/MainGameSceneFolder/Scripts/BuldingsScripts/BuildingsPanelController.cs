@@ -13,6 +13,8 @@ public class BuildingsPanelController : MonoBehaviour
     public GameObject CiftlikPaneli;
     public GameObject LaboratuvarPaneli;
     public GameObject AmbarPaneli;
+    public GameObject KalePaneli;
+
 
     public TMP_Text goldText;     // Altın miktarını gösterecek TMP_Text bileşeni
     public TMP_Text woodText;     // Kereste miktarını gösterecek TMP_Text bileşeni
@@ -37,7 +39,7 @@ public class BuildingsPanelController : MonoBehaviour
         // T�m panelleri listeye ekleyelim
         allPanels = new List<GameObject> {
             KislaPaneli, TasOcagiPaneli, HastanePaneli,
-            KeresteciPaneli, DemirciPaneli, CiftlikPaneli, LaboratuvarPaneli,  AmbarPaneli
+            KeresteciPaneli, DemirciPaneli, CiftlikPaneli, LaboratuvarPaneli,  AmbarPaneli, KalePaneli
         };
     }
 

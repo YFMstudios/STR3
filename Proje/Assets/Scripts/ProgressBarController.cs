@@ -17,6 +17,7 @@ public class ProgressBarController : MonoBehaviour
     public GameObject buildLabBar;
     public GameObject buildBarracksBar;
     public GameObject buildHospitalBar;
+    public GameObject upgradeCastleBar;
 
 
     public SliderController slider;
@@ -46,6 +47,7 @@ public class ProgressBarController : MonoBehaviour
     public LabPanelController labPanelController;
     public BarracksPanelController barracksPanelController;
     public HospitalPanelController hospitalPanelController;
+    public CastlePanelController castlePanelController;
     private TextMeshProUGUI buttonText;
     private TextMeshProUGUI healButtonText;
 
@@ -536,5 +538,35 @@ public class ProgressBarController : MonoBehaviour
             Debug.Log("Ýyileþtirme sýrasýnda bina yükseltemezsiniz, iyileþtirmeyi iptal edip yeniden deneyin.");
         }
        
+    }
+
+    public IEnumerator CastleIsFinished(Castle castle, System.Action<bool> onCompletion)
+    {
+        castlePanelController.cancelUpgradeCastleButton.gameObject.SetActive(true);               
+        castlePanelController.isBuildCanceled = false; // Ýptal durumu sýfýrla
+
+        // LeanTween animasyonu baþlat
+
+        LeanTween.scaleX(upgradeCastleBar, 1, castle.buildTime).setOnComplete(() => ResetProgressBar(upgradeCastleBar));
+
+        float elapsedTime = 0f; // Geçen zamaný takip et
+
+        while (elapsedTime < castle.buildTime)
+        {
+            if (castlePanelController.isBuildCanceled) // Eðer iptal edilirse
+            {
+                LeanTween.cancel(upgradeCastleBar); // Animasyonu iptal et
+                ResetProgressBar(upgradeCastleBar); // ProgressBar'ý sýfýrla
+                onCompletion(false); // Baþarýsýzlýk durumunu bildir
+                yield break; // Coroutine sonlandýr
+            }
+
+            elapsedTime += Time.deltaTime; // Geçen süreyi artýr
+            yield return null; // Bir sonraki kareye kadar bekle
+        }
+
+        // Ýptal edilmeden tamamlandýysa
+        castlePanelController.cancelUpgradeCastleButton.gameObject.SetActive(false);
+        onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
     }
 }
