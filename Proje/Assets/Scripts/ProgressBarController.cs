@@ -18,6 +18,7 @@ public class ProgressBarController : MonoBehaviour
     public GameObject buildBarracksBar;
     public GameObject buildHospitalBar;
     public GameObject upgradeCastleBar;
+    public GameObject buildTowerBar;
 
 
     public SliderController slider;
@@ -34,6 +35,8 @@ public class ProgressBarController : MonoBehaviour
     public bool isUnitCreationActive = false;
     public bool isHealActive = false;
     public bool isHospitalBuildActive = false;
+    public bool isTowerBuildingActive = false;
+
     public Button createUnitButton;
     public Button healButton;
 
@@ -48,6 +51,7 @@ public class ProgressBarController : MonoBehaviour
     public BarracksPanelController barracksPanelController;
     public HospitalPanelController hospitalPanelController;
     public CastlePanelController castlePanelController;
+    public TowerPanelController towerPanelController;
     private TextMeshProUGUI buttonText;
     private TextMeshProUGUI healButtonText;
 
@@ -568,5 +572,46 @@ public class ProgressBarController : MonoBehaviour
         // Ýptal edilmeden tamamlandýysa
         castlePanelController.cancelUpgradeCastleButton.gameObject.SetActive(false);
         onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
+    }
+
+    public IEnumerator TowerIsFinished(Tower tower, System.Action<bool> onCompletion)
+    {
+
+        if (isTowerBuildingActive)
+        {
+            Debug.Log("Halihazýrda bir iþlem devam ederken yeni iþlem gerçekleþtiremezsiniz.");
+        }
+
+        else
+        {
+            towerPanelController.cancelTowerButton.gameObject.SetActive(true);
+            towerPanelController.isBuildCanceled = false; // Ýptal durumu sýfýrla
+
+            // LeanTween animasyonu baþlat
+            LeanTween.scaleX(buildTowerBar, 1, tower.buildTime).setOnComplete(() => ResetProgressBar(buildTowerBar));
+            isTowerBuildingActive = true;
+
+            float elapsedTime = 0f; // Geçen zamaný takip et
+
+            while (elapsedTime < tower.buildTime)
+            {
+                if (towerPanelController.isBuildCanceled) // Eðer iptal edilirse
+                {
+                    LeanTween.cancel(buildTowerBar); // Animasyonu iptal et
+                    ResetProgressBar(buildTowerBar); // ProgressBar'ý sýfýrla
+                    isTowerBuildingActive = false;
+                    onCompletion(false); // Baþarýsýzlýk durumunu bildir
+                    yield break; // Coroutine sonlandýr
+                }
+
+                elapsedTime += Time.deltaTime; // Geçen süreyi artýr
+                yield return null; // Bir sonraki kareye kadar bekle
+            }
+
+            // Ýptal edilmeden tamamlandýysa
+            isTowerBuildingActive = false;
+            towerPanelController.cancelTowerButton.gameObject.SetActive(false);
+            onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
+        }
     }
 }

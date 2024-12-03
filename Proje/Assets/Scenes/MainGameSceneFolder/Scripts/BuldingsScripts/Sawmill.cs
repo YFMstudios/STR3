@@ -23,7 +23,7 @@ public class Sawmill : Building
         buildIronCost = 500;
         buildStoneCost = 600;
         buildTimberCost = 800;
-        buildTime = 1f;
+        buildTime = 15f;
         timberProductionRate = 5;
     }
 

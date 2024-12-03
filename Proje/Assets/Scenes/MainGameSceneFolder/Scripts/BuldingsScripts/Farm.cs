@@ -21,7 +21,7 @@ public class Farm : Building
         buildIronCost = 250;
         buildStoneCost = 400;
         buildTimberCost = 800;
-        buildTime = 1f;
+        buildTime = 25f;
         foodProductionRate = 15;
     }
 

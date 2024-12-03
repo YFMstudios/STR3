@@ -14,6 +14,10 @@ public class CastlePanelController : MonoBehaviour
     public TMP_Text buildLevelText;     // Bina seviyesini gösterecek TMP bileþeni
     public TMP_Text productionRateText; // Üretim Miktarýný gösterecek TMP bileþeni
     public TMP_Text maliyetText;
+    public TMP_Text menzilText;
+    public TMP_Text canText;
+    public TMP_Text saldiriHiziText;
+
 
     public Image goldImage;        // Altýn için resim
     public Image woodImage;        // Kereste için resim
@@ -37,10 +41,17 @@ public class CastlePanelController : MonoBehaviour
             woodText.text = "3500";
             stoneText.text = "3000";
             ironText.text = "2000";
+            menzilText.text = "15 br";
+            canText.text = "1500";
+            saldiriHiziText.text = "7.5 h/s";
         }
         else if (Castle.buildLevel == 3)
         {
             buildLevelText.text = "3";
+            menzilText.text = "20 br";
+            canText.text = "2500";
+            saldiriHiziText.text = "10 h/s";
+
 
             DestroyComponents();
 

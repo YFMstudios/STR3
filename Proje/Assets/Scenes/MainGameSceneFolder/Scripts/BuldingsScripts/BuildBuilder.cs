@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -23,6 +24,10 @@ public class BuildBuilder : MonoBehaviour
     public BarracksPanelController barracksPanelController;
     public HospitalPanelController hospitalPanelController;
     public CastlePanelController castlePanelController;
+    public TowerPanelController towerPanelController;
+
+    public static bool buildTowerOneIsActive = false;
+    public static bool buildTowerTwoIsActive = false;
 
     public static bool checkResources(Building building) // Artýk Building türü kabul ediliyor
     {
@@ -1447,7 +1452,7 @@ public void BuildDefenseWorkshop()
                         Castle.wasCastleCreated = true;
 
                         Castle.buildLevel = 2;
-                       //Özelliklerini arttýr
+                        castle.upgradeStats();
                         castle.UpdateCosts(); // Maliyetleri güncelle
                         buildButton.enabled = true;
                         castlePanelController.refreshCastle();
@@ -1492,7 +1497,7 @@ public void BuildDefenseWorkshop()
                             // Gerekli iþlemleri yap
 
                             Castle.buildLevel++;
-                           //Gerekeni Yap
+                            castle.upgradeStats();
                             castlePanelController.refreshCastle();
                             Destroy(buildButton.gameObject);
                         }
@@ -1516,5 +1521,312 @@ public void BuildDefenseWorkshop()
         }
     }
 
+    public void BuildTowerOne()
+    {// Zaten var olan kýþla nesnesini kullanmak için kontrol edin
+        if(!buildTowerTwoIsActive)
+        {
+            Tower towerOne = GetComponent<Tower>();
+
+            if (!Tower.wasTowerOneCreated)
+            {
+                towerOne = gameObject.AddComponent<Tower>();
+                TextMeshProUGUI buttonText = buildButton.GetComponentInChildren<TextMeshProUGUI>();
+
+                if (checkResources(towerOne))
+                {
+
+                    //Kaynaklarý Azalt
+                    Kingdom.myKingdom.GoldAmount -= towerOne.buildGoldCost;
+                    Kingdom.myKingdom.StoneAmount -= towerOne.buildStoneCost;
+                    Kingdom.myKingdom.WoodAmount -= towerOne.buildTimberCost;
+                    Kingdom.myKingdom.IronAmount -= towerOne.buildIronCost;
+                    Kingdom.myKingdom.FoodAmount -= towerOne.buildFoodCost;
+
+                    buildButton.enabled = false;
+
+                    buildTowerOneIsActive = true;
+                    StartCoroutine(progressBarController.TowerIsFinished(towerOne, (isFinished) =>
+                    {
+                        if (isFinished)
+                        {
+                            // Gerekli iþlemleri yap
+                            Tower.wasTowerOneCreated = true;
+                            Tower.towerOneBuildLevel = 1;
+                            towerOne.UpdateTowerOneCosts(towerOne);
+                            buttonText.text = "Yükselt";
+                            buildButton.enabled = true;
+                            towerPanelController.refreshTowerOne();
+                            buildTowerOneIsActive = false;
+                        }
+                        else
+                        {
+                            // Kaynaklarý iade et
+                            Kingdom.myKingdom.GoldAmount += towerOne.buildGoldCost;
+                            Kingdom.myKingdom.StoneAmount += towerOne.buildStoneCost;
+                            Kingdom.myKingdom.WoodAmount += towerOne.buildTimberCost;
+                            Kingdom.myKingdom.IronAmount += towerOne.buildIronCost;
+                            Kingdom.myKingdom.FoodAmount += towerOne.buildFoodCost;
+                            buildButton.enabled = true;
+                            buildTowerOneIsActive = false;
+                        }
+                    }));
+                }
+                else
+                {
+                    Debug.Log("Yeterli kaynak bulunmamaktadýr.");
+                }
+            }
+            else
+            {
+                if (Tower.towerOneBuildLevel == 1)
+                {
+                    TextMeshProUGUI buttonText = buildButton.GetComponentInChildren<TextMeshProUGUI>();
+                    if (checkResources(towerOne))
+                    //
+
+                    {
+
+                        Kingdom.myKingdom.GoldAmount -= towerOne.buildGoldCost;
+                        Kingdom.myKingdom.StoneAmount -= towerOne.buildStoneCost;
+                        Kingdom.myKingdom.WoodAmount -= towerOne.buildTimberCost;
+                        Kingdom.myKingdom.IronAmount -= towerOne.buildIronCost;
+                        Kingdom.myKingdom.FoodAmount -= towerOne.buildFoodCost;
+
+                        buildButton.enabled = false;
+                        buildTowerOneIsActive = true;
+                        StartCoroutine(progressBarController.TowerIsFinished(towerOne, (isFinished) =>
+                        {
+                            if (isFinished)
+                            {
+                                // Gerekli iþlemleri yap
+
+                                Tower.towerOneBuildLevel++;
+                                towerOne.UpdateTowerOneCosts(towerOne);
+                                buttonText.text = "Yükselt";
+                                buildButton.enabled = true;
+                                towerPanelController.refreshTowerOne();
+                                buildTowerOneIsActive = false;
+                            }
+                            else
+                            {
+                                // Kaynaklarý iade et
+                                Kingdom.myKingdom.GoldAmount += towerOne.buildGoldCost;
+                                Kingdom.myKingdom.StoneAmount += towerOne.buildStoneCost;
+                                Kingdom.myKingdom.WoodAmount += towerOne.buildTimberCost;
+                                Kingdom.myKingdom.IronAmount += towerOne.buildIronCost;
+                                Kingdom.myKingdom.FoodAmount += towerOne.buildFoodCost;
+                                buildButton.enabled = true;
+                                buildTowerOneIsActive = false;
+                            }
+                        }));
+                    }
+                    else
+                    {
+                        Debug.Log("Yeterli kaynak bulunmamaktadýr.");
+                    }
+                }
+
+                else if (Tower.towerOneBuildLevel == 2)
+                {
+                    TextMeshProUGUI buttonText = buildButton.GetComponentInChildren<TextMeshProUGUI>();
+                    if (checkResources(towerOne))
+                    //
+
+                    {
+                        //ProgressBar Ekle,Zaman dolunca aþaðýdakileri yap.
+                        Kingdom.myKingdom.GoldAmount -= towerOne.buildGoldCost;
+                        Kingdom.myKingdom.StoneAmount -= towerOne.buildStoneCost;
+                        Kingdom.myKingdom.WoodAmount -= towerOne.buildTimberCost;
+                        Kingdom.myKingdom.IronAmount -= towerOne.buildIronCost;
+                        Kingdom.myKingdom.FoodAmount -= towerOne.buildFoodCost;
+
+                        buildButton.enabled = false;
+                        buildTowerOneIsActive = true;
+                        StartCoroutine(progressBarController.TowerIsFinished(towerOne, (isFinished) =>
+                        {
+                            if (isFinished)
+                            {
+                                // Gerekli iþlemleri yap
+                                Tower.towerOneBuildLevel++;
+                                towerPanelController.refreshTowerOne();
+                                Destroy(buildButton.gameObject);
+                                buildTowerOneIsActive = false;
+                            }
+                            else
+                            {
+                                // Kaynaklarý iade et
+                                Kingdom.myKingdom.GoldAmount += towerOne.buildGoldCost;
+                                Kingdom.myKingdom.StoneAmount += towerOne.buildStoneCost;
+                                Kingdom.myKingdom.WoodAmount += towerOne.buildTimberCost;
+                                Kingdom.myKingdom.IronAmount += towerOne.buildIronCost;
+                                Kingdom.myKingdom.FoodAmount += towerOne.buildFoodCost;
+                                buildButton.enabled = true;
+                                buildTowerOneIsActive = false;
+                            }
+                        }));
+                    }
+                }
+                else
+                {
+                    Debug.Log("Bir sorun var gibi duruyor 'BuildBuilder' scriptindeki buildTowerOne fonksiyonunu kontrol ediniz.");
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Halihazýrda iþlem devam ederken yeni iþlem gerçekleþtiremezisniz.");
+        }
+        
+    }
+
+
+    public void BuildTowerTwo()
+    {
+        if (!buildTowerOneIsActive)
+        {
+            // Zaten var olan kýþla nesnesini kullanmak için kontrol edin
+            Tower towerTwo = GetComponent<Tower>();
+
+            if (!Tower.wasTowerTwoCreated)
+            {
+                towerTwo = gameObject.AddComponent<Tower>();
+                TextMeshProUGUI buttonText = buildButton.GetComponentInChildren<TextMeshProUGUI>();
+
+                if (checkResources(towerTwo))
+                {
+                    // Kaynaklarý Azalt
+                    Kingdom.myKingdom.GoldAmount -= towerTwo.buildGoldCost;
+                    Kingdom.myKingdom.StoneAmount -= towerTwo.buildStoneCost;
+                    Kingdom.myKingdom.WoodAmount -= towerTwo.buildTimberCost;
+                    Kingdom.myKingdom.IronAmount -= towerTwo.buildIronCost;
+                    Kingdom.myKingdom.FoodAmount -= towerTwo.buildFoodCost;
+
+                    buildButton.enabled = false;
+                    buildTowerTwoIsActive = true;
+                    StartCoroutine(progressBarController.TowerIsFinished(towerTwo, (isFinished) =>
+                    {
+                        if (isFinished)
+                        {
+                            // Gerekli iþlemleri yap
+                            Tower.wasTowerTwoCreated = true;
+                            Tower.towerTwoBuildLevel = 1;
+                            towerTwo.UpdateTowerTwoCosts(towerTwo);
+                            buttonText.text = "Yükselt";
+                            buildButton.enabled = true;
+                            towerPanelController.refreshTowerTwo();
+                            buildTowerTwoIsActive = false;
+                        }
+                        else
+                        {
+                            // Kaynaklarý iade et
+                            Kingdom.myKingdom.GoldAmount += towerTwo.buildGoldCost;
+                            Kingdom.myKingdom.StoneAmount += towerTwo.buildStoneCost;
+                            Kingdom.myKingdom.WoodAmount += towerTwo.buildTimberCost;
+                            Kingdom.myKingdom.IronAmount += towerTwo.buildIronCost;
+                            Kingdom.myKingdom.FoodAmount += towerTwo.buildFoodCost;
+                            buildButton.enabled = true;
+                            buildTowerTwoIsActive = false;
+                        }
+                    }));
+                }
+                else
+                {
+                    Debug.Log("Yeterli kaynak bulunmamaktadýr.");
+                }
+            }
+            else
+            {
+                if (Tower.towerTwoBuildLevel == 1)
+                {
+                    TextMeshProUGUI buttonText = buildButton.GetComponentInChildren<TextMeshProUGUI>();
+                    if (checkResources(towerTwo))
+                    {
+                        Kingdom.myKingdom.GoldAmount -= towerTwo.buildGoldCost;
+                        Kingdom.myKingdom.StoneAmount -= towerTwo.buildStoneCost;
+                        Kingdom.myKingdom.WoodAmount -= towerTwo.buildTimberCost;
+                        Kingdom.myKingdom.IronAmount -= towerTwo.buildIronCost;
+                        Kingdom.myKingdom.FoodAmount -= towerTwo.buildFoodCost;
+
+                        buildButton.enabled = false;
+                        buildTowerTwoIsActive = true;
+                        StartCoroutine(progressBarController.TowerIsFinished(towerTwo, (isFinished) =>
+                        {
+                            if (isFinished)
+                            {
+                                // Gerekli iþlemleri yap
+                                Tower.towerTwoBuildLevel++;
+                                towerTwo.UpdateTowerTwoCosts(towerTwo);
+                                buttonText.text = "Yükselt";
+                                buildButton.enabled = true;
+                                towerPanelController.refreshTowerTwo();
+                                buildTowerTwoIsActive = false;
+                            }
+                            else
+                            {
+                                // Kaynaklarý iade et
+                                Kingdom.myKingdom.GoldAmount += towerTwo.buildGoldCost;
+                                Kingdom.myKingdom.StoneAmount += towerTwo.buildStoneCost;
+                                Kingdom.myKingdom.WoodAmount += towerTwo.buildTimberCost;
+                                Kingdom.myKingdom.IronAmount += towerTwo.buildIronCost;
+                                Kingdom.myKingdom.FoodAmount += towerTwo.buildFoodCost;
+                                buildButton.enabled = true;
+                                buildTowerTwoIsActive = false;
+                            }
+                        }));
+                    }
+                    else
+                    {
+                        Debug.Log("Yeterli kaynak bulunmamaktadýr.");
+                    }
+                }
+                else if (Tower.towerTwoBuildLevel == 2)
+                {
+                    TextMeshProUGUI buttonText = buildButton.GetComponentInChildren<TextMeshProUGUI>();
+                    if (checkResources(towerTwo))
+                    {
+                        Kingdom.myKingdom.GoldAmount -= towerTwo.buildGoldCost;
+                        Kingdom.myKingdom.StoneAmount -= towerTwo.buildStoneCost;
+                        Kingdom.myKingdom.WoodAmount -= towerTwo.buildTimberCost;
+                        Kingdom.myKingdom.IronAmount -= towerTwo.buildIronCost;
+                        Kingdom.myKingdom.FoodAmount -= towerTwo.buildFoodCost;
+
+                        buildButton.enabled = false;
+                        buildTowerTwoIsActive = true;
+                        StartCoroutine(progressBarController.TowerIsFinished(towerTwo, (isFinished) =>
+                        {
+                            if (isFinished)
+                            {
+                                // Gerekli iþlemleri yap
+                                Tower.towerTwoBuildLevel++;
+                                towerPanelController.refreshTowerTwo();
+                                buildTowerTwoIsActive = false;
+                                Destroy(buildButton.gameObject);
+                            }
+                            else
+                            {
+                                // Kaynaklarý iade et
+                                Kingdom.myKingdom.GoldAmount += towerTwo.buildGoldCost;
+                                Kingdom.myKingdom.StoneAmount += towerTwo.buildStoneCost;
+                                Kingdom.myKingdom.WoodAmount += towerTwo.buildTimberCost;
+                                Kingdom.myKingdom.IronAmount += towerTwo.buildIronCost;
+                                Kingdom.myKingdom.FoodAmount += towerTwo.buildFoodCost;
+                                buildButton.enabled = true;
+                                buildTowerTwoIsActive = false;
+                            }
+                        }));
+                    }
+                }
+                else
+                {
+                    Debug.Log("Bir sorun var gibi duruyor 'BuildBuilder' scriptindeki buildTowerTwo fonksiyonunu kontrol ediniz.");
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Halihazýrda iþlem devam ederken yeni iþlem gerçekleþtiremezisniz.");
+        }
+
+    }
 }
 

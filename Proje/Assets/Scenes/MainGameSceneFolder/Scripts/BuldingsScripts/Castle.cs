@@ -12,7 +12,7 @@ public class Castle : Building
     {
         // Özelliklerin baþlangýç deðerlerini atama
         buildingName = "Castle";
-        buildingType = BuildingType.UnitProduction;
+        buildingType = BuildingType.Defense;
         health = 100;
         buildGoldCost = 2000;
         buildFoodCost = 1200;
@@ -32,7 +32,7 @@ public class Castle : Building
             buildIronCost = 1500;
             buildStoneCost = 1800;
             buildTimberCost = 2200;
-            buildTime = 10f;
+            buildTime = 1f;
         }
         else if (buildLevel == 2)
         {
@@ -41,7 +41,13 @@ public class Castle : Building
             buildIronCost = 2000;
             buildStoneCost = 2500;
             buildTimberCost = 3000;
-            buildTime = 15f;
+            buildTime = 1f;
         }
+    }
+
+    public void upgradeStats()
+    {
+        //Furkanýn Sahnesindeki özellikleri arttýr.
+        Debug.Log("Furkanýn sahnedeki deðiþkenleri burada deðiþtir.");
     }
 }
