@@ -7,7 +7,7 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
-
+// OPTÝMÝZASYON KISMINDA KAYNAK AZALTMA,ÝADE ETME GÝBÝ ÝÞLEMLER METHODLAÞTIRILABÝLÝR.
 public class BuildBuilder : MonoBehaviour
 {
     public ResearchController researchController;
@@ -25,9 +25,12 @@ public class BuildBuilder : MonoBehaviour
     public HospitalPanelController hospitalPanelController;
     public CastlePanelController castlePanelController;
     public TowerPanelController towerPanelController;
+    public TrapPanelController trapPanelController;
 
     public static bool buildTowerOneIsActive = false;
     public static bool buildTowerTwoIsActive = false;
+    public static bool isAnyTrapActive = false;
+
 
     public static bool checkResources(Building building) // Artýk Building türü kabul ediliyor
     {
@@ -1828,5 +1831,340 @@ public void BuildDefenseWorkshop()
         }
 
     }
+
+    public void BuildTrapOne()
+    {
+        if (!isAnyTrapActive)
+        {
+            Trap trapOne = GetComponent<Trap>();
+
+            if (!Trap.wasTrapOneCreated)
+            {
+                trapOne = gameObject.AddComponent<Trap>();
+                TextMeshProUGUI buttonText = buildButton.GetComponentInChildren<TextMeshProUGUI>();
+
+                if (checkResources(trapOne))
+                {
+                    // Kaynaklarý azalt
+                    Kingdom.myKingdom.GoldAmount -= trapOne.buildGoldCost;
+                    Kingdom.myKingdom.StoneAmount -= trapOne.buildStoneCost;
+                    Kingdom.myKingdom.WoodAmount -= trapOne.buildTimberCost;
+                    Kingdom.myKingdom.IronAmount -= trapOne.buildIronCost;
+                    Kingdom.myKingdom.FoodAmount -= trapOne.buildFoodCost;
+
+                    buildButton.enabled = false;
+                    isAnyTrapActive = true;
+                    StartCoroutine(progressBarController.TrapIsFinished(trapOne, (isFinished) =>
+                    {
+                        if (isFinished)
+                        {
+                            Trap.wasTrapOneCreated = true;
+                            Trap.trapOneBuildLevel = 1;
+                            trapOne.UpdateTrapOneCosts(trapOne);
+                            buttonText.text = "Yükselt";
+                            buildButton.enabled = true;
+                            trapPanelController.refreshTrapOne();
+                            isAnyTrapActive = false;
+                        }
+                        else
+                        {
+                            Kingdom.myKingdom.GoldAmount += trapOne.buildGoldCost;
+                            Kingdom.myKingdom.StoneAmount += trapOne.buildStoneCost;
+                            Kingdom.myKingdom.WoodAmount += trapOne.buildTimberCost;
+                            Kingdom.myKingdom.IronAmount += trapOne.buildIronCost;
+                            Kingdom.myKingdom.FoodAmount += trapOne.buildFoodCost;
+                            buildButton.enabled = true;
+                            isAnyTrapActive = false;
+                        }
+                    }));
+                }
+                else
+                {
+                    Debug.Log("Yeterli kaynak bulunmamaktadýr.");
+                }
+            }
+            else
+            {
+                if (Trap.trapOneBuildLevel == 1 || Trap.trapOneBuildLevel == 2)
+                {
+                    TextMeshProUGUI buttonText = buildButton.GetComponentInChildren<TextMeshProUGUI>();
+                    if (checkResources(trapOne))
+                    {
+                        // Kaynaklarý azalt
+                        Kingdom.myKingdom.GoldAmount -= trapOne.buildGoldCost;
+                        Kingdom.myKingdom.StoneAmount -= trapOne.buildStoneCost;
+                        Kingdom.myKingdom.WoodAmount -= trapOne.buildTimberCost;
+                        Kingdom.myKingdom.IronAmount -= trapOne.buildIronCost;
+                        Kingdom.myKingdom.FoodAmount -= trapOne.buildFoodCost;
+
+                        buildButton.enabled = false;
+                        isAnyTrapActive = true;
+                        StartCoroutine(progressBarController.TrapIsFinished(trapOne, (isFinished) =>
+                        {
+                            if (isFinished)
+                            {
+                                Trap.trapOneBuildLevel++;
+                                trapOne.UpdateTrapOneCosts(trapOne);
+                                buttonText.text = "Yükselt";
+                                buildButton.enabled = true;
+                                trapPanelController.refreshTrapOne();
+                                if (Trap.trapOneBuildLevel == 3)
+                                {
+                                    Destroy(buildButton.gameObject);
+                                }
+                                isAnyTrapActive = false;
+                            }
+                            else
+                            {
+                                Kingdom.myKingdom.GoldAmount += trapOne.buildGoldCost;
+                                Kingdom.myKingdom.StoneAmount += trapOne.buildStoneCost;
+                                Kingdom.myKingdom.WoodAmount += trapOne.buildTimberCost;
+                                Kingdom.myKingdom.IronAmount += trapOne.buildIronCost;
+                                Kingdom.myKingdom.FoodAmount += trapOne.buildFoodCost;
+                                buildButton.enabled = true;
+                                isAnyTrapActive = false;
+                            }
+                        }));
+                    }
+                    else
+                    {
+                        Debug.Log("Yeterli kaynak bulunmamaktadýr.");
+                    }
+                }
+                else
+                {
+                    Debug.Log("Bir sorun var gibi duruyor. 'BuildTrapOne' fonksiyonunu kontrol ediniz.");
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Halihazýrda iþlem devam ederken yeni iþlem gerçekleþtiremezsiniz.");
+        }
+    }
+
+    public void BuildTrapTwo()
+    {
+        if (!isAnyTrapActive)
+        {
+            Trap trapTwo = GetComponent<Trap>();
+
+            if (!Trap.wasTrapTwoCreated)
+            {
+                trapTwo = gameObject.AddComponent<Trap>();
+                TextMeshProUGUI buttonText = buildButton.GetComponentInChildren<TextMeshProUGUI>();
+
+                if (checkResources(trapTwo))
+                {
+                    // Kaynaklarý azalt
+                    Kingdom.myKingdom.GoldAmount -= trapTwo.buildGoldCost;
+                    Kingdom.myKingdom.StoneAmount -= trapTwo.buildStoneCost;
+                    Kingdom.myKingdom.WoodAmount -= trapTwo.buildTimberCost;
+                    Kingdom.myKingdom.IronAmount -= trapTwo.buildIronCost;
+                    Kingdom.myKingdom.FoodAmount -= trapTwo.buildFoodCost;
+
+                    buildButton.enabled = false;
+                    isAnyTrapActive = true;
+                    StartCoroutine(progressBarController.TrapIsFinished(trapTwo, (isFinished) =>
+                    {
+                        if (isFinished)
+                        {
+                            Trap.wasTrapTwoCreated = true;
+                            Trap.trapTwoBuildLevel = 1;
+                            trapTwo.UpdateTrapTwoCosts(trapTwo);
+                            buttonText.text = "Yükselt";
+                            buildButton.enabled = true;
+                            trapPanelController.refreshTrapTwo();
+                            isAnyTrapActive = false;
+                        }
+                        else
+                        {
+                            Kingdom.myKingdom.GoldAmount += trapTwo.buildGoldCost;
+                            Kingdom.myKingdom.StoneAmount += trapTwo.buildStoneCost;
+                            Kingdom.myKingdom.WoodAmount += trapTwo.buildTimberCost;
+                            Kingdom.myKingdom.IronAmount += trapTwo.buildIronCost;
+                            Kingdom.myKingdom.FoodAmount += trapTwo.buildFoodCost;
+                            buildButton.enabled = true;
+                            isAnyTrapActive = false;
+                        }
+                    }));
+                }
+                else
+                {
+                    Debug.Log("Yeterli kaynak bulunmamaktadýr.");
+                }
+            }
+            else
+            {
+                if (Trap.trapTwoBuildLevel == 1 || Trap.trapTwoBuildLevel == 2)
+                {
+                    TextMeshProUGUI buttonText = buildButton.GetComponentInChildren<TextMeshProUGUI>();
+                    if (checkResources(trapTwo))
+                    {
+                        // Kaynaklarý azalt
+                        Kingdom.myKingdom.GoldAmount -= trapTwo.buildGoldCost;
+                        Kingdom.myKingdom.StoneAmount -= trapTwo.buildStoneCost;
+                        Kingdom.myKingdom.WoodAmount -= trapTwo.buildTimberCost;
+                        Kingdom.myKingdom.IronAmount -= trapTwo.buildIronCost;
+                        Kingdom.myKingdom.FoodAmount -= trapTwo.buildFoodCost;
+
+                        buildButton.enabled = false;
+                        isAnyTrapActive = true;
+                        StartCoroutine(progressBarController.TrapIsFinished(trapTwo, (isFinished) =>
+                        {
+                            if (isFinished)
+                            {
+                                Trap.trapTwoBuildLevel++;
+                                trapTwo.UpdateTrapTwoCosts(trapTwo);
+                                buttonText.text = "Yükselt";
+                                buildButton.enabled = true;
+                                trapPanelController.refreshTrapTwo();
+                                if (Trap.trapTwoBuildLevel == 3)
+                                {
+                                    Destroy(buildButton.gameObject);
+                                }
+                                isAnyTrapActive = false;
+                            }
+                            else
+                            {
+                                Kingdom.myKingdom.GoldAmount += trapTwo.buildGoldCost;
+                                Kingdom.myKingdom.StoneAmount += trapTwo.buildStoneCost;
+                                Kingdom.myKingdom.WoodAmount += trapTwo.buildTimberCost;
+                                Kingdom.myKingdom.IronAmount += trapTwo.buildIronCost;
+                                Kingdom.myKingdom.FoodAmount += trapTwo.buildFoodCost;
+                                buildButton.enabled = true;
+                                isAnyTrapActive = false;
+                            }
+                        }));
+                    }
+                    else
+                    {
+                        Debug.Log("Yeterli kaynak bulunmamaktadýr.");
+                    }
+                }
+                else
+                {
+                    Debug.Log("Bir sorun var gibi duruyor. 'BuildTrapTwo' fonksiyonunu kontrol ediniz.");
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Halihazýrda iþlem devam ederken yeni iþlem gerçekleþtiremezsiniz.");
+        }
+    }
+
+    public void BuildTrapThree()
+    {
+        if (!isAnyTrapActive)
+        {
+            Trap trapThree = GetComponent<Trap>();
+
+            if (!Trap.wasTrapThreeCreated)
+            {
+                trapThree = gameObject.AddComponent<Trap>();
+                TextMeshProUGUI buttonText = buildButton.GetComponentInChildren<TextMeshProUGUI>();
+
+                if (checkResources(trapThree))
+                {
+                    // Kaynaklarý azalt
+                    Kingdom.myKingdom.GoldAmount -= trapThree.buildGoldCost;
+                    Kingdom.myKingdom.StoneAmount -= trapThree.buildStoneCost;
+                    Kingdom.myKingdom.WoodAmount -= trapThree.buildTimberCost;
+                    Kingdom.myKingdom.IronAmount -= trapThree.buildIronCost;
+                    Kingdom.myKingdom.FoodAmount -= trapThree.buildFoodCost;
+
+                    buildButton.enabled = false;
+                    isAnyTrapActive = true;
+                    StartCoroutine(progressBarController.TrapIsFinished(trapThree, (isFinished) =>
+                    {
+                        if (isFinished)
+                        {
+                            Trap.wasTrapThreeCreated = true;
+                            Trap.trapThreeBuildLevel = 1;
+                            trapThree.UpdateTrapThreeCosts(trapThree);
+                            buttonText.text = "Yükselt";
+                            buildButton.enabled = true;
+                            trapPanelController.refreshTrapThree();
+                            isAnyTrapActive = false;
+                        }
+                        else
+                        {
+                            Kingdom.myKingdom.GoldAmount += trapThree.buildGoldCost;
+                            Kingdom.myKingdom.StoneAmount += trapThree.buildStoneCost;
+                            Kingdom.myKingdom.WoodAmount += trapThree.buildTimberCost;
+                            Kingdom.myKingdom.IronAmount += trapThree.buildIronCost;
+                            Kingdom.myKingdom.FoodAmount += trapThree.buildFoodCost;
+                            buildButton.enabled = true;
+                            isAnyTrapActive = false;
+                        }
+                    }));
+                }
+                else
+                {
+                    Debug.Log("Yeterli kaynak bulunmamaktadýr.");
+                }
+            }
+            else
+            {
+                if (Trap.trapThreeBuildLevel == 1 || Trap.trapThreeBuildLevel == 2)
+                {
+                    TextMeshProUGUI buttonText = buildButton.GetComponentInChildren<TextMeshProUGUI>();
+                    if (checkResources(trapThree))
+                    {
+                        // Kaynaklarý azalt
+                        Kingdom.myKingdom.GoldAmount -= trapThree.buildGoldCost;
+                        Kingdom.myKingdom.StoneAmount -= trapThree.buildStoneCost;
+                        Kingdom.myKingdom.WoodAmount -= trapThree.buildTimberCost;
+                        Kingdom.myKingdom.IronAmount -= trapThree.buildIronCost;
+                        Kingdom.myKingdom.FoodAmount -= trapThree.buildFoodCost;
+
+                        buildButton.enabled = false;
+                        isAnyTrapActive = true;
+                        StartCoroutine(progressBarController.TrapIsFinished(trapThree, (isFinished) =>
+                        {
+                            if (isFinished)
+                            {
+                                Trap.trapThreeBuildLevel++;
+                                trapThree.UpdateTrapThreeCosts(trapThree);
+                                buttonText.text = "Yükselt";
+                                buildButton.enabled = true;
+                                trapPanelController.refreshTrapThree();
+                                if (Trap.trapThreeBuildLevel == 3)
+                                {
+                                    Destroy(buildButton.gameObject);
+                                }
+                                isAnyTrapActive = false;
+                            }
+                            else
+                            {
+                                Kingdom.myKingdom.GoldAmount += trapThree.buildGoldCost;
+                                Kingdom.myKingdom.StoneAmount += trapThree.buildStoneCost;
+                                Kingdom.myKingdom.WoodAmount += trapThree.buildTimberCost;
+                                Kingdom.myKingdom.IronAmount += trapThree.buildIronCost;
+                                Kingdom.myKingdom.FoodAmount += trapThree.buildFoodCost;
+                                buildButton.enabled = true;
+                                isAnyTrapActive = false;
+                            }
+                        }));
+                    }
+                    else
+                    {
+                        Debug.Log("Yeterli kaynak bulunmamaktadýr.");
+                    }
+                }
+                else
+                {
+                    Debug.Log("Bir sorun var gibi duruyor. 'BuildTrapThree' fonksiyonunu kontrol ediniz.");
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Halihazýrda iþlem devam ederken yeni iþlem gerçekleþtiremezsiniz.");
+        }
+    }
+
+
 }
 

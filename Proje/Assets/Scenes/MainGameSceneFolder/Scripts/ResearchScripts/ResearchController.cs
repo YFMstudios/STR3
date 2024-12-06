@@ -22,6 +22,7 @@ public class ResearchController : MonoBehaviour
 
         if (ResearchButtonEvents.isResearched[0] == true)
         {
+
             lockItems[1].enabled = false;
             lockItems[2].enabled = false;
         }

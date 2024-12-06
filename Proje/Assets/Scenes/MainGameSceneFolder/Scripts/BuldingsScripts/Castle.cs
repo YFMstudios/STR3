@@ -47,7 +47,7 @@ public class Castle : Building
 
     public void upgradeStats()
     {
-        //Furkanýn Sahnesindeki özellikleri arttýr.
+        
         Debug.Log("Furkanýn sahnedeki deðiþkenleri burada deðiþtir.");
     }
 }

@@ -19,6 +19,7 @@ public class ProgressBarController : MonoBehaviour
     public GameObject buildHospitalBar;
     public GameObject upgradeCastleBar;
     public GameObject buildTowerBar;
+    public GameObject buildTrapBar;
 
 
     public SliderController slider;
@@ -37,6 +38,8 @@ public class ProgressBarController : MonoBehaviour
     public bool isHospitalBuildActive = false;
     public bool isTowerBuildingActive = false;
 
+    public bool isAnyTrapActive = false;
+
     public Button createUnitButton;
     public Button healButton;
 
@@ -52,6 +55,9 @@ public class ProgressBarController : MonoBehaviour
     public HospitalPanelController hospitalPanelController;
     public CastlePanelController castlePanelController;
     public TowerPanelController towerPanelController;
+    public TrapPanelController trapPanelController;
+
+
     private TextMeshProUGUI buttonText;
     private TextMeshProUGUI healButtonText;
 
@@ -614,4 +620,45 @@ public class ProgressBarController : MonoBehaviour
             onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
         }
     }
+
+    public IEnumerator TrapIsFinished(Trap trap, System.Action<bool> onCompletion)
+    {
+        if (isAnyTrapActive)
+        {
+            Debug.Log("Halihazýrda bir iþlem devam ederken yeni iþlem gerçekleþtiremezsiniz.");
+        }
+        else
+        {
+            trapPanelController.cancelTrapButton.gameObject.SetActive(true);
+            trapPanelController.isBuildCanceled = false; // Ýptal durumu sýfýrla
+
+            // LeanTween animasyonu baþlat
+            LeanTween.scaleX(buildTrapBar, 1, trap.buildTime).setOnComplete(() => ResetProgressBar(buildTrapBar));
+            isAnyTrapActive = true;
+
+            float elapsedTime = 0f; // Geçen zamaný takip et
+
+            while (elapsedTime < trap.buildTime)
+            {
+                if (trapPanelController.isBuildCanceled) // Eðer iptal edilirse
+                {
+                    LeanTween.cancel(buildTrapBar); // Animasyonu iptal et
+                    ResetProgressBar(buildTrapBar); // ProgressBar'ý sýfýrla
+                    isAnyTrapActive = false;
+                    onCompletion(false); // Baþarýsýzlýk durumunu bildir
+                    yield break; // Coroutine sonlandýr
+                }
+
+                elapsedTime += Time.deltaTime; // Geçen süreyi artýr
+                yield return null; // Bir sonraki kareye kadar bekle
+            }
+
+            // Ýptal edilmeden tamamlandýysa
+            isAnyTrapActive = false;
+            trapPanelController.cancelTrapButton.gameObject.SetActive(false);
+            onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
+        }
+    }
+
+
 }
