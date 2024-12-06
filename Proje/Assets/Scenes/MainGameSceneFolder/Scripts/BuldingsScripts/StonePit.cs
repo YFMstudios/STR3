@@ -29,7 +29,7 @@ public class StonePit : Building
         buildIronCost = 500;
         buildStoneCost = 600;
         buildTimberCost = 900;
-        buildTime = 2f;
+        buildTime = 15f;
         stoneProductionRate = 3;
         
     }

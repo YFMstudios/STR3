@@ -1929,7 +1929,6 @@ GameObject:
   - component: {fileID: 42015083}
   - component: {fileID: 42015082}
   - component: {fileID: 42015081}
-  - component: {fileID: 42015084}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -2001,7 +2000,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 42015084}
+      - m_Target: {fileID: 855829521}
         m_TargetAssemblyTypeName: BuildBuilder, Assembly-CSharp
         m_MethodName: BuildHospital
         m_Mode: 1
@@ -2051,32 +2050,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42015079}
   m_CullTransparentMesh: 1
---- !u!114 &42015084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 42015079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  researchController: {fileID: 1774118553}
-  buildButton: {fileID: 42015081}
-  progressBarController: {fileID: 250818655}
-  wareHousePanelController: {fileID: 1857280096}
-  stonepitPanelController: {fileID: 6597936}
-  sawmillPanelController: {fileID: 1349949392}
-  farmPanelController: {fileID: 1843992850}
-  blacksmithPanelController: {fileID: 1710035373}
-  labPanelController: {fileID: 796053679}
-  barracksPanelController: {fileID: 77116426}
-  hospitalPanelController: {fileID: 1176594859}
-  castlePanelController: {fileID: 0}
-  towerPanelController: {fileID: 0}
-  trapPanelController: {fileID: 0}
 --- !u!1 &49457399
 GameObject:
   m_ObjectHideFlags: 0
@@ -5030,9 +5003,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  researchController: {fileID: 1774118553}
-  buildButton: {fileID: 104230028}
+  buildStonePitButton: {fileID: 0}
+  buildBlacksmithButton: {fileID: 0}
+  buildSawmillButton: {fileID: 0}
+  buildBarracksButton: {fileID: 0}
+  buildFarmButton: {fileID: 0}
+  buildHospitalButton: {fileID: 0}
+  buildLabButton: {fileID: 0}
+  buildDefenseWorkshopButton: {fileID: 0}
+  buildWarehouseButton: {fileID: 0}
+  buildCastleButton: {fileID: 0}
+  buildTowerOneButton: {fileID: 0}
+  buildTowerTwoButton: {fileID: 0}
+  buildSiegeWorkshopButton: {fileID: 0}
+  buildTrapOneButton: {fileID: 0}
+  buildTrapTwoButton: {fileID: 0}
+  buildTrapThreeButton: {fileID: 0}
   progressBarController: {fileID: 0}
+  researchController: {fileID: 1774118553}
   wareHousePanelController: {fileID: 0}
   stonepitPanelController: {fileID: 0}
   sawmillPanelController: {fileID: 0}
@@ -10160,7 +10148,13 @@ MonoBehaviour:
   isHealActive: 0
   isHospitalBuildActive: 0
   isTowerBuildingActive: 0
+  isFarmBuildActive: 0
   isAnyTrapActive: 0
+  isWareHouseBuildingActive: 0
+  isStonePitBuildingActive: 0
+  isSawmillBuildingActive: 0
+  isBlacksmithBuildingActive: 0
+  isCastleBuildingActive: 0
   createUnitButton: {fileID: 84412077}
   healButton: {fileID: 1063184935}
   isLabBuildActive: 0
@@ -10175,6 +10169,7 @@ MonoBehaviour:
   castlePanelController: {fileID: 2141381836}
   towerPanelController: {fileID: 141944812}
   trapPanelController: {fileID: 1961369825}
+  constructionController: {fileID: 1977470395}
   time: 5
   kalanZaman: {fileID: 0}
 --- !u!4 &250818656
@@ -35135,7 +35130,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &849477386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35275,6 +35270,79 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 853090835}
   m_CullTransparentMesh: 1
+--- !u!1 &855829520
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 855829522}
+  - component: {fileID: 855829521}
+  m_Layer: 0
+  m_Name: ConstructionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &855829521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855829520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildStonePitButton: {fileID: 1733424059}
+  buildBlacksmithButton: {fileID: 1147567283}
+  buildSawmillButton: {fileID: 877249086}
+  buildBarracksButton: {fileID: 1274341523}
+  buildFarmButton: {fileID: 1244317813}
+  buildHospitalButton: {fileID: 42015081}
+  buildLabButton: {fileID: 1608911805}
+  buildDefenseWorkshopButton: {fileID: 0}
+  buildWarehouseButton: {fileID: 1009877763}
+  buildCastleButton: {fileID: 1009559437}
+  buildTowerOneButton: {fileID: 1444855353}
+  buildTowerTwoButton: {fileID: 1172057170}
+  buildSiegeWorkshopButton: {fileID: 0}
+  buildTrapOneButton: {fileID: 1939744558}
+  buildTrapTwoButton: {fileID: 1672803052}
+  buildTrapThreeButton: {fileID: 1829223755}
+  progressBarController: {fileID: 250818655}
+  researchController: {fileID: 1774118553}
+  wareHousePanelController: {fileID: 1857280096}
+  stonepitPanelController: {fileID: 6597936}
+  sawmillPanelController: {fileID: 1349949392}
+  farmPanelController: {fileID: 1843992850}
+  blacksmithPanelController: {fileID: 1710035373}
+  labPanelController: {fileID: 796053679}
+  barracksPanelController: {fileID: 77116426}
+  hospitalPanelController: {fileID: 1176594859}
+  castlePanelController: {fileID: 2141381836}
+  towerPanelController: {fileID: 141944812}
+  trapPanelController: {fileID: 1961369825}
+--- !u!4 &855829522
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855829520}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -181.206, y: 862.9521, z: -2.6146984}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &858798547
 GameObject:
   m_ObjectHideFlags: 0
@@ -36288,7 +36356,6 @@ GameObject:
   - component: {fileID: 877249088}
   - component: {fileID: 877249087}
   - component: {fileID: 877249086}
-  - component: {fileID: 877249089}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -36360,7 +36427,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 877249089}
+      - m_Target: {fileID: 855829521}
         m_TargetAssemblyTypeName: BuildBuilder, Assembly-CSharp
         m_MethodName: BuildSawmill
         m_Mode: 1
@@ -36410,32 +36477,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 877249084}
   m_CullTransparentMesh: 1
---- !u!114 &877249089
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 877249084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  researchController: {fileID: 1774118553}
-  buildButton: {fileID: 877249086}
-  progressBarController: {fileID: 250818655}
-  wareHousePanelController: {fileID: 1857280096}
-  stonepitPanelController: {fileID: 6597936}
-  sawmillPanelController: {fileID: 1349949392}
-  farmPanelController: {fileID: 0}
-  blacksmithPanelController: {fileID: 0}
-  labPanelController: {fileID: 0}
-  barracksPanelController: {fileID: 0}
-  hospitalPanelController: {fileID: 0}
-  castlePanelController: {fileID: 0}
-  towerPanelController: {fileID: 0}
-  trapPanelController: {fileID: 0}
 --- !u!1 &878359998
 GameObject:
   m_ObjectHideFlags: 0
@@ -41546,7 +41587,6 @@ GameObject:
   - component: {fileID: 1009559439}
   - component: {fileID: 1009559438}
   - component: {fileID: 1009559437}
-  - component: {fileID: 1009559436}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -41574,32 +41614,6 @@ RectTransform:
   m_AnchoredPosition: {x: 772, y: -311.00003}
   m_SizeDelta: {x: 160.2127, y: 58.996}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1009559436
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1009559434}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  researchController: {fileID: 1774118553}
-  buildButton: {fileID: 1009559437}
-  progressBarController: {fileID: 250818655}
-  wareHousePanelController: {fileID: 1857280096}
-  stonepitPanelController: {fileID: 6597936}
-  sawmillPanelController: {fileID: 1349949392}
-  farmPanelController: {fileID: 1843992850}
-  blacksmithPanelController: {fileID: 1710035373}
-  labPanelController: {fileID: 796053679}
-  barracksPanelController: {fileID: 77116426}
-  hospitalPanelController: {fileID: 1176594859}
-  castlePanelController: {fileID: 2141381836}
-  towerPanelController: {fileID: 0}
-  trapPanelController: {fileID: 0}
 --- !u!114 &1009559437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41644,7 +41658,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1009559436}
+      - m_Target: {fileID: 855829521}
         m_TargetAssemblyTypeName: BuildBuilder, Assembly-CSharp
         m_MethodName: UpgradeCastle
         m_Mode: 1
@@ -41706,7 +41720,6 @@ GameObject:
   - component: {fileID: 1009877765}
   - component: {fileID: 1009877764}
   - component: {fileID: 1009877763}
-  - component: {fileID: 1009877762}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -41734,32 +41747,6 @@ RectTransform:
   m_AnchoredPosition: {x: 827, y: -368}
   m_SizeDelta: {x: 160.2127, y: 58.996}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1009877762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1009877759}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  researchController: {fileID: 1774118553}
-  buildButton: {fileID: 1009877763}
-  progressBarController: {fileID: 250818655}
-  wareHousePanelController: {fileID: 1857280096}
-  stonepitPanelController: {fileID: 0}
-  sawmillPanelController: {fileID: 0}
-  farmPanelController: {fileID: 0}
-  blacksmithPanelController: {fileID: 0}
-  labPanelController: {fileID: 0}
-  barracksPanelController: {fileID: 0}
-  hospitalPanelController: {fileID: 0}
-  castlePanelController: {fileID: 0}
-  towerPanelController: {fileID: 0}
-  trapPanelController: {fileID: 0}
 --- !u!114 &1009877763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41804,7 +41791,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1009877762}
+      - m_Target: {fileID: 855829521}
         m_TargetAssemblyTypeName: BuildBuilder, Assembly-CSharp
         m_MethodName: BuildWarehouse
         m_Mode: 1
@@ -45457,7 +45444,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1089580926
 RectTransform:
   m_ObjectHideFlags: 0
@@ -48294,7 +48281,6 @@ GameObject:
   - component: {fileID: 1147567285}
   - component: {fileID: 1147567284}
   - component: {fileID: 1147567283}
-  - component: {fileID: 1147567286}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -48366,7 +48352,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1147567286}
+      - m_Target: {fileID: 855829521}
         m_TargetAssemblyTypeName: BuildBuilder, Assembly-CSharp
         m_MethodName: BuildBlacksmith
         m_Mode: 1
@@ -48416,32 +48402,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1147567281}
   m_CullTransparentMesh: 1
---- !u!114 &1147567286
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1147567281}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  researchController: {fileID: 1774118553}
-  buildButton: {fileID: 1147567283}
-  progressBarController: {fileID: 250818655}
-  wareHousePanelController: {fileID: 1857280096}
-  stonepitPanelController: {fileID: 6597936}
-  sawmillPanelController: {fileID: 1349949392}
-  farmPanelController: {fileID: 1843992850}
-  blacksmithPanelController: {fileID: 1710035373}
-  labPanelController: {fileID: 0}
-  barracksPanelController: {fileID: 0}
-  hospitalPanelController: {fileID: 0}
-  castlePanelController: {fileID: 0}
-  towerPanelController: {fileID: 0}
-  trapPanelController: {fileID: 0}
 --- !u!1 &1151751384
 GameObject:
   m_ObjectHideFlags: 0
@@ -49402,7 +49362,6 @@ GameObject:
   - component: {fileID: 1172057172}
   - component: {fileID: 1172057171}
   - component: {fileID: 1172057170}
-  - component: {fileID: 1172057173}
   - component: {fileID: 1172057174}
   m_Layer: 5
   m_Name: "Kule\u0130ki\u0130n\u015FaEtButton"
@@ -49475,7 +49434,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1172057173}
+      - m_Target: {fileID: 855829521}
         m_TargetAssemblyTypeName: BuildBuilder, Assembly-CSharp
         m_MethodName: BuildTowerTwo
         m_Mode: 1
@@ -49525,32 +49484,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1172057168}
   m_CullTransparentMesh: 1
---- !u!114 &1172057173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1172057168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  researchController: {fileID: 0}
-  buildButton: {fileID: 1172057170}
-  progressBarController: {fileID: 250818655}
-  wareHousePanelController: {fileID: 0}
-  stonepitPanelController: {fileID: 0}
-  sawmillPanelController: {fileID: 0}
-  farmPanelController: {fileID: 0}
-  blacksmithPanelController: {fileID: 0}
-  labPanelController: {fileID: 0}
-  barracksPanelController: {fileID: 0}
-  hospitalPanelController: {fileID: 0}
-  castlePanelController: {fileID: 0}
-  towerPanelController: {fileID: 141944812}
-  trapPanelController: {fileID: 0}
 --- !u!114 &1172057174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52198,7 +52131,6 @@ GameObject:
   - component: {fileID: 1244317815}
   - component: {fileID: 1244317814}
   - component: {fileID: 1244317813}
-  - component: {fileID: 1244317816}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -52270,21 +52202,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1244317816}
+      - m_Target: {fileID: 855829521}
         m_TargetAssemblyTypeName: BuildBuilder, Assembly-CSharp
         m_MethodName: BuildFarm
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BuildingsPanelController, Assembly-CSharp
-        m_MethodName: refreshFarm
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -52332,32 +52252,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1244317811}
   m_CullTransparentMesh: 1
---- !u!114 &1244317816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1244317811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  researchController: {fileID: 1774118553}
-  buildButton: {fileID: 1244317813}
-  progressBarController: {fileID: 250818655}
-  wareHousePanelController: {fileID: 1857280096}
-  stonepitPanelController: {fileID: 6597936}
-  sawmillPanelController: {fileID: 1349949392}
-  farmPanelController: {fileID: 1843992850}
-  blacksmithPanelController: {fileID: 0}
-  labPanelController: {fileID: 0}
-  barracksPanelController: {fileID: 0}
-  hospitalPanelController: {fileID: 0}
-  castlePanelController: {fileID: 0}
-  towerPanelController: {fileID: 0}
-  trapPanelController: {fileID: 0}
 --- !u!1 &1246171676
 GameObject:
   m_ObjectHideFlags: 0
@@ -53334,7 +53228,6 @@ GameObject:
   - component: {fileID: 1274341525}
   - component: {fileID: 1274341524}
   - component: {fileID: 1274341523}
-  - component: {fileID: 1274341526}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -53406,7 +53299,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1274341526}
+      - m_Target: {fileID: 855829521}
         m_TargetAssemblyTypeName: BuildBuilder, Assembly-CSharp
         m_MethodName: BuildBarracks
         m_Mode: 1
@@ -53456,32 +53349,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1274341521}
   m_CullTransparentMesh: 1
---- !u!114 &1274341526
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1274341521}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  researchController: {fileID: 1774118553}
-  buildButton: {fileID: 1274341523}
-  progressBarController: {fileID: 250818655}
-  wareHousePanelController: {fileID: 1857280096}
-  stonepitPanelController: {fileID: 6597936}
-  sawmillPanelController: {fileID: 1349949392}
-  farmPanelController: {fileID: 1843992850}
-  blacksmithPanelController: {fileID: 1710035373}
-  labPanelController: {fileID: 796053679}
-  barracksPanelController: {fileID: 77116426}
-  hospitalPanelController: {fileID: 0}
-  castlePanelController: {fileID: 0}
-  towerPanelController: {fileID: 0}
-  trapPanelController: {fileID: 0}
 --- !u!1 &1275587906
 GameObject:
   m_ObjectHideFlags: 0
@@ -62475,7 +62342,6 @@ GameObject:
   - component: {fileID: 1444855355}
   - component: {fileID: 1444855354}
   - component: {fileID: 1444855353}
-  - component: {fileID: 1444855356}
   - component: {fileID: 1444855357}
   m_Layer: 5
   m_Name: "KuleBir\u0130n\u015FaEtButton"
@@ -62548,7 +62414,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1444855356}
+      - m_Target: {fileID: 855829521}
         m_TargetAssemblyTypeName: BuildBuilder, Assembly-CSharp
         m_MethodName: BuildTowerOne
         m_Mode: 1
@@ -62598,32 +62464,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1444855351}
   m_CullTransparentMesh: 1
---- !u!114 &1444855356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1444855351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  researchController: {fileID: 1774118553}
-  buildButton: {fileID: 1444855353}
-  progressBarController: {fileID: 250818655}
-  wareHousePanelController: {fileID: 1857280096}
-  stonepitPanelController: {fileID: 6597936}
-  sawmillPanelController: {fileID: 1349949392}
-  farmPanelController: {fileID: 1843992850}
-  blacksmithPanelController: {fileID: 1710035373}
-  labPanelController: {fileID: 796053679}
-  barracksPanelController: {fileID: 77116426}
-  hospitalPanelController: {fileID: 1176594859}
-  castlePanelController: {fileID: 2141381836}
-  towerPanelController: {fileID: 141944812}
-  trapPanelController: {fileID: 0}
 --- !u!114 &1444855357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69457,7 +69297,6 @@ GameObject:
   - component: {fileID: 1608911807}
   - component: {fileID: 1608911806}
   - component: {fileID: 1608911805}
-  - component: {fileID: 1608911804}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -69485,32 +69324,6 @@ RectTransform:
   m_AnchoredPosition: {x: 797.1587, y: -364}
   m_SizeDelta: {x: 160.2127, y: 58.996}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1608911804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1608911802}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  researchController: {fileID: 1774118553}
-  buildButton: {fileID: 1608911805}
-  progressBarController: {fileID: 250818655}
-  wareHousePanelController: {fileID: 1857280096}
-  stonepitPanelController: {fileID: 6597936}
-  sawmillPanelController: {fileID: 1349949392}
-  farmPanelController: {fileID: 1843992850}
-  blacksmithPanelController: {fileID: 1710035373}
-  labPanelController: {fileID: 796053679}
-  barracksPanelController: {fileID: 0}
-  hospitalPanelController: {fileID: 0}
-  castlePanelController: {fileID: 0}
-  towerPanelController: {fileID: 0}
-  trapPanelController: {fileID: 0}
 --- !u!114 &1608911805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69555,7 +69368,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1608911804}
+      - m_Target: {fileID: 855829521}
         m_TargetAssemblyTypeName: BuildBuilder, Assembly-CSharp
         m_MethodName: BuildLab
         m_Mode: 1
@@ -72490,7 +72303,6 @@ GameObject:
   - component: {fileID: 1672803054}
   - component: {fileID: 1672803053}
   - component: {fileID: 1672803052}
-  - component: {fileID: 1672803051}
   - component: {fileID: 1672803050}
   m_Layer: 5
   m_Name: "Tuzak2\u0130n\u015FaEtButton"
@@ -72532,32 +72344,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Panel: {fileID: 1718094294}
---- !u!114 &1672803051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1672803048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  researchController: {fileID: 0}
-  buildButton: {fileID: 1672803052}
-  progressBarController: {fileID: 250818655}
-  wareHousePanelController: {fileID: 0}
-  stonepitPanelController: {fileID: 0}
-  sawmillPanelController: {fileID: 0}
-  farmPanelController: {fileID: 0}
-  blacksmithPanelController: {fileID: 0}
-  labPanelController: {fileID: 0}
-  barracksPanelController: {fileID: 0}
-  hospitalPanelController: {fileID: 0}
-  castlePanelController: {fileID: 0}
-  towerPanelController: {fileID: 141944812}
-  trapPanelController: {fileID: 1961369825}
 --- !u!114 &1672803052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72602,7 +72388,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1672803051}
+      - m_Target: {fileID: 855829521}
         m_TargetAssemblyTypeName: BuildBuilder, Assembly-CSharp
         m_MethodName: BuildTrapTwo
         m_Mode: 1
@@ -75305,7 +75091,6 @@ GameObject:
   - component: {fileID: 1733424061}
   - component: {fileID: 1733424060}
   - component: {fileID: 1733424059}
-  - component: {fileID: 1733424058}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -75333,32 +75118,6 @@ RectTransform:
   m_AnchoredPosition: {x: 826, y: -442}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1733424058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1733424056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  researchController: {fileID: 1774118553}
-  buildButton: {fileID: 1733424059}
-  progressBarController: {fileID: 250818655}
-  wareHousePanelController: {fileID: 1857280096}
-  stonepitPanelController: {fileID: 6597936}
-  sawmillPanelController: {fileID: 1349949392}
-  farmPanelController: {fileID: 0}
-  blacksmithPanelController: {fileID: 0}
-  labPanelController: {fileID: 0}
-  barracksPanelController: {fileID: 0}
-  hospitalPanelController: {fileID: 0}
-  castlePanelController: {fileID: 0}
-  towerPanelController: {fileID: 0}
-  trapPanelController: {fileID: 0}
 --- !u!114 &1733424059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75403,7 +75162,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1733424058}
+      - m_Target: {fileID: 855829521}
         m_TargetAssemblyTypeName: BuildBuilder, Assembly-CSharp
         m_MethodName: BuildStonePit
         m_Mode: 1
@@ -79295,7 +79054,6 @@ GameObject:
   - component: {fileID: 1829223757}
   - component: {fileID: 1829223756}
   - component: {fileID: 1829223755}
-  - component: {fileID: 1829223754}
   - component: {fileID: 1829223753}
   m_Layer: 5
   m_Name: "Tuzak3\u0130n\u015FaEtButton"
@@ -79337,32 +79095,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Panel: {fileID: 1718094294}
---- !u!114 &1829223754
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1829223751}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  researchController: {fileID: 0}
-  buildButton: {fileID: 1829223755}
-  progressBarController: {fileID: 250818655}
-  wareHousePanelController: {fileID: 0}
-  stonepitPanelController: {fileID: 0}
-  sawmillPanelController: {fileID: 0}
-  farmPanelController: {fileID: 0}
-  blacksmithPanelController: {fileID: 0}
-  labPanelController: {fileID: 0}
-  barracksPanelController: {fileID: 0}
-  hospitalPanelController: {fileID: 0}
-  castlePanelController: {fileID: 0}
-  towerPanelController: {fileID: 141944812}
-  trapPanelController: {fileID: 1961369825}
 --- !u!114 &1829223755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79407,7 +79139,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1829223754}
+      - m_Target: {fileID: 855829521}
         m_TargetAssemblyTypeName: BuildBuilder, Assembly-CSharp
         m_MethodName: BuildTrapThree
         m_Mode: 1
@@ -79969,9 +79701,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  researchController: {fileID: 1774118553}
-  buildButton: {fileID: 1841061053}
+  buildStonePitButton: {fileID: 0}
+  buildBlacksmithButton: {fileID: 0}
+  buildSawmillButton: {fileID: 0}
+  buildBarracksButton: {fileID: 0}
+  buildFarmButton: {fileID: 0}
+  buildHospitalButton: {fileID: 0}
+  buildLabButton: {fileID: 0}
+  buildDefenseWorkshopButton: {fileID: 0}
+  buildWarehouseButton: {fileID: 0}
+  buildCastleButton: {fileID: 0}
+  buildTowerOneButton: {fileID: 0}
+  buildTowerTwoButton: {fileID: 0}
+  buildSiegeWorkshopButton: {fileID: 0}
+  buildTrapOneButton: {fileID: 0}
+  buildTrapTwoButton: {fileID: 0}
+  buildTrapThreeButton: {fileID: 0}
   progressBarController: {fileID: 0}
+  researchController: {fileID: 1774118553}
   wareHousePanelController: {fileID: 0}
   stonepitPanelController: {fileID: 0}
   sawmillPanelController: {fileID: 0}
@@ -84388,7 +84135,6 @@ GameObject:
   - component: {fileID: 1939744560}
   - component: {fileID: 1939744559}
   - component: {fileID: 1939744558}
-  - component: {fileID: 1939744557}
   - component: {fileID: 1939744556}
   m_Layer: 5
   m_Name: "Tuzak1\u0130n\u015FaEtButton"
@@ -84430,32 +84176,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Panel: {fileID: 1718094294}
---- !u!114 &1939744557
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1939744554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd2bc3e422c1924c89d2ed21ef4b998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  researchController: {fileID: 1774118553}
-  buildButton: {fileID: 1939744558}
-  progressBarController: {fileID: 250818655}
-  wareHousePanelController: {fileID: 1857280096}
-  stonepitPanelController: {fileID: 6597936}
-  sawmillPanelController: {fileID: 1349949392}
-  farmPanelController: {fileID: 1843992850}
-  blacksmithPanelController: {fileID: 1710035373}
-  labPanelController: {fileID: 796053679}
-  barracksPanelController: {fileID: 77116426}
-  hospitalPanelController: {fileID: 1176594859}
-  castlePanelController: {fileID: 2141381836}
-  towerPanelController: {fileID: 141944812}
-  trapPanelController: {fileID: 1961369825}
 --- !u!114 &1939744558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84500,7 +84220,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1939744557}
+      - m_Target: {fileID: 855829521}
         m_TargetAssemblyTypeName: BuildBuilder, Assembly-CSharp
         m_MethodName: BuildTrapOne
         m_Mode: 1
@@ -86806,6 +86526,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1976362104}
   m_CullTransparentMesh: 1
+--- !u!1 &1977470394
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1977470396}
+  - component: {fileID: 1977470395}
+  m_Layer: 0
+  m_Name: ConstructionController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1977470395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1977470394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d06859d9579b1d949aa7254defced69a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  progressBarController: {fileID: 250818655}
+--- !u!4 &1977470396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1977470394}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1456.7628, y: 396.12897, z: -0.48664385}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1981339801
 GameObject:
   m_ObjectHideFlags: 0
@@ -95447,4 +95212,6 @@ SceneRoots:
   - {fileID: 2141381835}
   - {fileID: 141944811}
   - {fileID: 1961369826}
+  - {fileID: 1977470396}
   - {fileID: 1832603466}
+  - {fileID: 855829522}
