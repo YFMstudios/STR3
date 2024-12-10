@@ -24,9 +24,10 @@ public class StonepitPanelController : MonoBehaviour
     public Button cancelStonepitButton;
     public bool isBuildCanceled = false;
     public GameObject progressBar;
+    public PanelManager panelManager;
     public void refreshStonePit()
     {
-
+        
         if (StonePit.buildLevel == 1)
         {
             buildLevelText.text = "1";
@@ -78,6 +79,7 @@ public class StonepitPanelController : MonoBehaviour
     public void cancelStonepitBuild()
     {
         isBuildCanceled = true; // Ýptal iþlemini baþlat
+        panelManager.DestroyPanel("StonepitBuildingProcessPanel");
         cancelStonepitButton.gameObject.SetActive(false);
     }
 }

@@ -24,7 +24,7 @@ public class TrapPanelController : MonoBehaviour
     public Button cancelTrapButton;
     public bool isBuildCanceled = false;
     public GameObject progressBar;
-
+    public PanelManager panelManager;
     // Trap 1 refresh function
     public void refreshTrapOne()
     {
@@ -108,6 +108,7 @@ public class TrapPanelController : MonoBehaviour
     public void cancelTrapBuild()
     {
         isBuildCanceled = true; // Ýptal iþlemini baþlat
+        panelManager.DestroyPanel("TrapBuildingProcessPanel");
         cancelTrapButton.gameObject.SetActive(false);
     }
 }

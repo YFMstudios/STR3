@@ -23,6 +23,7 @@ public class HospitalPanelController : MonoBehaviour
 
     public Button cancelHospitalButton;
     public bool isBuildCanceled = false;
+    public PanelManager panelManager;
 
     public void refreshHospital()
     {
@@ -79,5 +80,6 @@ public class HospitalPanelController : MonoBehaviour
     {
         isBuildCanceled = true; // Ýptal iþlemini baþlat
         cancelHospitalButton.gameObject.SetActive(false);
+        panelManager.DestroyPanel("HospitalBuildingProcessPanel");
     }
 }

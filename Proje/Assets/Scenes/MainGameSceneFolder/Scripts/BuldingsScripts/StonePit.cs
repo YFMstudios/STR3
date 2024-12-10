@@ -21,7 +21,7 @@ public class StonePit : Building
     public StonePit()
     {
         // Özelliklerin baþlangýç deðerlerini atama
-        buildingName = "Stone Pit";
+        buildingName = "Stonepit";
         buildingType = BuildingType.ResourceProduction;
         health = 100;
         buildGoldCost = 1800;

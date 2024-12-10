@@ -24,7 +24,7 @@ public class WareHousePanelController : MonoBehaviour
     public GameObject progressBar;
     public Button cancelWarehouseButton;
     public bool isBuildCanceled = false;
-
+    public PanelManager panelManager;
     public void refreshWarehouse()
     {
         if (Warehouse.buildLevel == 1)
@@ -75,6 +75,7 @@ public class WareHousePanelController : MonoBehaviour
     public void cancelWareHouseBuild()
     {
         isBuildCanceled = true; // Ýptal iþlemini baþlat
+        panelManager.DestroyPanel("WareHouseBuildingProcessPanel");
         cancelWarehouseButton.gameObject.SetActive(false);
     }
 }

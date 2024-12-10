@@ -24,7 +24,7 @@ public class BarracksPanelController : MonoBehaviour
     public Button cancelBarracksButton;
     public bool isBuildCanceled = false;
     public GameObject progressBar;
-
+    public PanelManager panelManager;
     public void refreshBarracks()
     {
         if (Barracks.buildLevel == 1)
@@ -79,6 +79,7 @@ public class BarracksPanelController : MonoBehaviour
     public void cancelBarracksBuild()
     {
         isBuildCanceled = true; // Ýptal iþlemini baþlat
+        panelManager.DestroyPanel("BarracksBuildingProcessPanel");
         cancelBarracksButton.gameObject.SetActive(false);
     }
 }

@@ -27,7 +27,7 @@ public class CastlePanelController : MonoBehaviour
 
     public Button cancelUpgradeCastleButton;
     public bool isBuildCanceled = false;
-
+    public PanelManager panelManager;
     public GameObject progressBar;
 
     public void refreshCastle()
@@ -81,6 +81,7 @@ public class CastlePanelController : MonoBehaviour
     public void cancelCastleBuild()
     {
         isBuildCanceled = true; // Ýptal iþlemini baþlat
+        panelManager.DestroyPanel("CastleUpgradeProcessPanel");
         cancelUpgradeCastleButton.gameObject.SetActive(false);
     }
 }

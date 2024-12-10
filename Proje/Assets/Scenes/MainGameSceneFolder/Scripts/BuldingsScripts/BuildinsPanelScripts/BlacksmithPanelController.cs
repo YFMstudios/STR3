@@ -24,7 +24,7 @@ public class BlacksmithPanelController : MonoBehaviour
     public Button cancelBlacksmithButton;
     public bool isBuildCanceled = false;
     public GameObject progressBar;
-
+    public PanelManager panelManager;
     public void refreshBlacksmith()
     {
 
@@ -79,6 +79,7 @@ public class BlacksmithPanelController : MonoBehaviour
     public void cancelBlacksmithBuild()
     {
         isBuildCanceled = true; // Ýptal iþlemini baþlat
+        panelManager.DestroyPanel("BlacksmithBuildingProcessPanel");
         cancelBlacksmithButton.gameObject.SetActive(false);
     }
 }
