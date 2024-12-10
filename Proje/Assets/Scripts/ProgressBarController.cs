@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -64,7 +65,9 @@ public class ProgressBarController : MonoBehaviour
     public TowerPanelController towerPanelController;
     public TrapPanelController trapPanelController;
     public ConstructionController constructionController;
+    public PanelManager panelManager;
 
+   
 
     private TextMeshProUGUI buttonText;
     private TextMeshProUGUI healButtonText;
@@ -300,9 +303,11 @@ public class ProgressBarController : MonoBehaviour
 
         wareHousePanelController.cancelWarehouseButton.gameObject.SetActive(true);
         wareHousePanelController.isBuildCanceled = false; // Ýptal durumu sýfýrla
-
+        string panelName = "WareHouseBuildingProcessPanel";
         // LeanTween animasyonu baþlat
         LeanTween.scaleX(buildWareHouseBar, 1, warehouse.buildTime).setOnComplete(() => ResetProgressBar(buildWareHouseBar));
+        panelManager.CreatePanel(panelName, warehouse.buildingName, warehouse.buildTime);
+
         isWareHouseBuildingActive = true;
         float elapsedTime = 0f; // Geçen zamaný takip et
 
@@ -313,6 +318,7 @@ public class ProgressBarController : MonoBehaviour
                 LeanTween.cancel(buildWareHouseBar); // Animasyonu iptal et
                 ResetProgressBar(buildWareHouseBar); // ProgressBar'ý sýfýrla
                 onCompletion(false); // Baþarýsýzlýk durumunu bildir
+               
                 isWareHouseBuildingActive = false;
                 yield break; // Coroutine sonlandýr
             }
@@ -324,9 +330,11 @@ public class ProgressBarController : MonoBehaviour
         // Ýptal edilmeden tamamlandýysa
         wareHousePanelController.cancelWarehouseButton.gameObject.SetActive(false);
         isWareHouseBuildingActive = false;
+        panelManager.DestroyPanel("WarehouseBuildingProcessPanel");
+
+
         onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
     }
-
 
 
     public IEnumerator StonePitIsFinished(StonePit stonepit, System.Action<bool> onCompletion)
@@ -338,12 +346,13 @@ public class ProgressBarController : MonoBehaviour
             onCompletion(false); // Baþarýsýzlýk durumunu bildir
             yield break; // Coroutine sonlandýr
         }
-
+        string panelName = "StonepitBuildingProcessPanel";
         stonepitPanelController.cancelStonepitButton.gameObject.SetActive(true);
         stonepitPanelController.isBuildCanceled = false; // Ýptal durumu sýfýrla
 
         // LeanTween animasyonu baþlat
         LeanTween.scaleX(buildStonepitBar, 1, stonepit.buildTime).setOnComplete(() => ResetProgressBar(buildStonepitBar));
+        panelManager.CreatePanel(panelName,stonepit.buildingName,stonepit.buildTime);
         isStonePitBuildingActive = true;
         float elapsedTime = 0f; // Geçen zamaný takip et
 
@@ -365,6 +374,7 @@ public class ProgressBarController : MonoBehaviour
         // Ýptal edilmeden tamamlandýysa
         stonepitPanelController.cancelStonepitButton.gameObject.SetActive(false);
         isStonePitBuildingActive = false;
+        panelManager.DestroyPanel("StonepitBuildingProcessPanel");
         onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
     }
 
@@ -384,20 +394,24 @@ public class ProgressBarController : MonoBehaviour
 
         // LeanTween animasyonu baþlat
         LeanTween.scaleX(buildSawmillBar, 1, sawmill.buildTime).setOnComplete(() => ResetProgressBar(buildSawmillBar));
+        string panelName = "SawmillBuildingProcessPanel";
+        panelManager.CreatePanel(panelName, sawmill.buildingName, sawmill.buildTime);
         isSawmillBuildingActive = true;
 
         float elapsedTime = 0f; // Geçen zamaný takip et
 
         while (elapsedTime < sawmill.buildTime)
         {
-            Debug.Log("SawmillIsFinished adlý IEnumarator'un içindeki while döngüsündeyim.");
+          
             if (sawmillPanelController.isBuildCanceled) // Eðer iptal edilirse
             {
                 LeanTween.cancel(buildSawmillBar); // Animasyonu iptal et
                 ResetProgressBar(buildSawmillBar); // ProgressBar'ý sýfýrla
                 onCompletion(false); // Baþarýsýzlýk durumunu bildir
+                //DestroyProcess();
                 isSawmillBuildingActive = false;
                 Debug.Log(" Coroutine Sonlandý");
+                
                 yield break; // Coroutine sonlandýr
             }
             
@@ -410,7 +424,9 @@ public class ProgressBarController : MonoBehaviour
         Debug.Log("Tamamlandý");
         sawmillPanelController.cancelSawmillButton.gameObject.SetActive(false);
         isSawmillBuildingActive = false;
+        panelManager.DestroyPanel("SawmillBuildingProcessPanel");
         sawmillPanelController.refreshSawmill();
+        //DestroyProcess();
         onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
     }
     
@@ -432,6 +448,9 @@ public class ProgressBarController : MonoBehaviour
         // LeanTween animasyonu baþlat
         LeanTween.scaleX(buildFarmBar, 1, farm.buildTime).setOnComplete(() => ResetProgressBar(buildFarmBar));
         isFarmBuildActive = true;
+
+        string panelName = "FarmBuildingProcessPanel";
+        panelManager.CreatePanel(panelName, farm.buildingName, farm.buildTime);
 
         float elapsedTime = 0f; // Geçen zamaný takip et
 
@@ -455,6 +474,7 @@ public class ProgressBarController : MonoBehaviour
         Debug.Log("Coroutine Bitti");
         farmPanelController.cancelFarmButton.gameObject.SetActive(false);
         isFarmBuildActive = false;
+        panelManager.DestroyPanel("FarmBuildingProcessPanel");
         farmPanelController.refreshFarm();
         onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
     }
@@ -478,6 +498,9 @@ public class ProgressBarController : MonoBehaviour
         LeanTween.scaleX(buildBlacksmithBar, 1, blacksmith.buildTime).setOnComplete(() => ResetProgressBar(buildBlacksmithBar));
         isBlacksmithBuildingActive = true;
 
+        string panelName = "BlacksmithBuildingProcessPanel";
+        panelManager.CreatePanel(panelName, blacksmith.buildingName, blacksmith.buildTime);
+
         float elapsedTime = 0f; // Geçen zamaný takip et
 
         while (elapsedTime < blacksmith.buildTime)
@@ -498,6 +521,8 @@ public class ProgressBarController : MonoBehaviour
         // Ýptal edilmeden tamamlandýysa
         blacksmithPanelController.cancelBlacksmithButton.gameObject.SetActive(false);
         isBlacksmithBuildingActive = false;
+        panelManager.DestroyPanel("BlacksmithBuildingProcessPanel");
+
         onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
     }
 
@@ -527,6 +552,9 @@ public class ProgressBarController : MonoBehaviour
         LeanTween.scaleX(buildLabBar, 1, lab.buildTime).setOnComplete(() => ResetProgressBar(buildLabBar));
         isLabBuildActive = true;
 
+        string panelName = "LabBuildingProcessPanel";
+        panelManager.CreatePanel(panelName, lab.buildingName, lab.buildTime);
+
         float elapsedTime = 0f; // Geçen zamaný takip et
 
         while (elapsedTime < lab.buildTime)
@@ -546,7 +574,7 @@ public class ProgressBarController : MonoBehaviour
 
         // Ýptal edilmeden tamamlandýysa
         isLabBuildActive = false;
-
+        panelManager.DestroyPanel("LabBuildingProcessPanel");
         labPanelController.cancelLabButton.gameObject.SetActive(false);
         onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
     }
@@ -577,6 +605,9 @@ public class ProgressBarController : MonoBehaviour
         LeanTween.scaleX(buildBarracksBar, 1, barracks.buildTime).setOnComplete(() => ResetProgressBar(buildBarracksBar));
         isBarracksBuildActive = true;
 
+        string panelName = "BarracksBuildingProcessPanel";
+        panelManager.CreatePanel(panelName, barracks.buildingName, barracks.buildTime);
+
         float elapsedTime = 0f; // Geçen zamaný takip et
 
         while (elapsedTime < barracks.buildTime)
@@ -596,6 +627,7 @@ public class ProgressBarController : MonoBehaviour
 
         // Ýptal edilmeden tamamlandýysa
         isBarracksBuildActive = false;
+        panelManager.DestroyPanel("BarracksBuildingProcessPanel");
         barracksPanelController.cancelBarracksButton.gameObject.SetActive(false);
         onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
     }
@@ -625,6 +657,10 @@ public class ProgressBarController : MonoBehaviour
         // LeanTween animasyonu baþlat
         LeanTween.scaleX(buildHospitalBar, 1, hospital.buildTime).setOnComplete(() => ResetProgressBar(buildHospitalBar));
         isHospitalBuildActive = true;
+
+        string panelName = "HospitalBuildingProcessPanel";
+        panelManager.CreatePanel(panelName, hospital.buildingName, hospital.buildTime);
+
         float elapsedTime = 0f; // Geçen zamaný takip et
 
         while (elapsedTime < hospital.buildTime)
@@ -644,6 +680,7 @@ public class ProgressBarController : MonoBehaviour
 
         // Ýptal edilmeden tamamlandýysa
         isHospitalBuildActive = false;
+        panelManager.DestroyPanel("HospitalBuildingProcessPanel");
         hospitalPanelController.cancelHospitalButton.gameObject.SetActive(false);
         onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
     }
@@ -666,6 +703,10 @@ public class ProgressBarController : MonoBehaviour
         LeanTween.scaleX(upgradeCastleBar, 1, castle.buildTime).setOnComplete(() => ResetProgressBar(upgradeCastleBar));
         isCastleBuildingActive = true;
 
+
+        string panelName = "CastleUpgradeProcessPanel";
+        panelManager.CreatePanel(panelName, castle.buildingName, castle.buildTime);
+
         float elapsedTime = 0f; // Geçen zamaný takip et
 
         while (elapsedTime < castle.buildTime)
@@ -686,6 +727,7 @@ public class ProgressBarController : MonoBehaviour
         // Ýptal edilmeden tamamlandýysa
         castlePanelController.cancelUpgradeCastleButton.gameObject.SetActive(false);
         isCastleBuildingActive = false;
+        panelManager.DestroyPanel("CastleUpgradeProcessPanel");
         onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
     }
 
@@ -713,6 +755,9 @@ public class ProgressBarController : MonoBehaviour
             LeanTween.scaleX(buildTowerBar, 1, tower.buildTime).setOnComplete(() => ResetProgressBar(buildTowerBar));
             isTowerBuildingActive = true;
 
+            string panelName = "TowerBuildingProcessPanel";  
+            panelManager.CreatePanel(panelName, tower.buildingName, tower.buildTime);
+
             float elapsedTime = 0f; // Geçen zamaný takip et
 
             while (elapsedTime < tower.buildTime)
@@ -732,7 +777,8 @@ public class ProgressBarController : MonoBehaviour
 
             // Ýptal edilmeden tamamlandýysa
             isTowerBuildingActive = false;
-            towerPanelController.cancelTowerButton.gameObject.SetActive(false);
+        panelManager.DestroyPanel("TowerBuildingProcessPanel");
+        towerPanelController.cancelTowerButton.gameObject.SetActive(false);
             onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
         
     }
@@ -760,7 +806,10 @@ public class ProgressBarController : MonoBehaviour
             LeanTween.scaleX(buildTrapBar, 1, trap.buildTime).setOnComplete(() => ResetProgressBar(buildTrapBar));
             isAnyTrapActive = true;
 
-            float elapsedTime = 0f; // Geçen zamaný takip et
+            string panelName = "TrapBuildingProcessPanel";
+            panelManager.CreatePanel(panelName, trap.buildingName, trap.buildTime);
+
+        float elapsedTime = 0f; // Geçen zamaný takip et
 
             while (elapsedTime < trap.buildTime)
             {
@@ -779,6 +828,7 @@ public class ProgressBarController : MonoBehaviour
 
             // Ýptal edilmeden tamamlandýysa
             isAnyTrapActive = false;
+            panelManager.DestroyPanel("TrapBuildingProcessPanel");
             trapPanelController.cancelTrapButton.gameObject.SetActive(false);
             onCompletion(true); // Tamamlandýðýnda baþarýlý olarak bildir
         

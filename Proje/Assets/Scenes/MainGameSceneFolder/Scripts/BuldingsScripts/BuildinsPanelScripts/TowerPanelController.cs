@@ -22,7 +22,7 @@ public class TowerPanelController : MonoBehaviour
     public Button cancelTowerButton;
     public bool isBuildCanceled = false;
     public GameObject progressBar;
-
+    public PanelManager panelManager;
     public void refreshTowerOne()
     {
         if (Tower.towerOneBuildLevel == 1)
@@ -89,6 +89,7 @@ public class TowerPanelController : MonoBehaviour
     public void cancelTowerBuild()
     {
         isBuildCanceled = true; // Ýptal iþlemini baþlat
+        panelManager.DestroyPanel("TowerBuildingProcessPanel");
         cancelTowerButton.gameObject.SetActive(false);
     }
 }

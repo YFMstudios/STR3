@@ -24,6 +24,7 @@ public class LabPanelController : MonoBehaviour
     public Button cancelLabButton;
     public bool isBuildCanceled = false;
     public GameObject progressBar;
+    public PanelManager panelManager;
 
     public void refreshLab()
     {
@@ -76,6 +77,7 @@ public class LabPanelController : MonoBehaviour
     public void cancelLabBuild()
     {
         isBuildCanceled = true; // Ýptal iþlemini baþlat
+        panelManager.DestroyPanel("LabBuildingProcessPanel");
         cancelLabButton.gameObject.SetActive(false);
     }
 }

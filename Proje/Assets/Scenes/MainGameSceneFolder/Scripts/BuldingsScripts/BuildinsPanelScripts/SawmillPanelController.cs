@@ -24,6 +24,7 @@ public class SawmillPanelController : MonoBehaviour
     public Button cancelSawmillButton;
     public bool isBuildCanceled = false;
     public GameObject progressBar;
+    public PanelManager panelManager;
 
     public void refreshSawmill()
     {
@@ -79,6 +80,7 @@ public class SawmillPanelController : MonoBehaviour
     public void cancelSawmillBuild()
     {
         isBuildCanceled = true; // Ýptal iþlemini baþlat
+        panelManager.DestroyPanel("SawmillBuildingProcessPanel");
         cancelSawmillButton.gameObject.SetActive(false);
     }
 }

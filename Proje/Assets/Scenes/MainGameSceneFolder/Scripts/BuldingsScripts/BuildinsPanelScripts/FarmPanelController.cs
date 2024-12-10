@@ -24,7 +24,7 @@ public class FarmPanelController : MonoBehaviour
     public Button cancelFarmButton;
     public bool isBuildCanceled = false;
     public GameObject progressBar;
-
+    public PanelManager panelManager;
     public void refreshFarm()
     {
 
@@ -79,6 +79,7 @@ public class FarmPanelController : MonoBehaviour
     public void cancelFarmBuild()
     {
         isBuildCanceled = true; // Ýptal iþlemini baþlat
+        panelManager.DestroyPanel("FarmBuildingProcessPanel");
         cancelFarmButton.gameObject.SetActive(false);
     }
 }
