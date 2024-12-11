@@ -7,7 +7,10 @@ using UnityEngine.UI;
 
 public class PanelManager : MonoBehaviour
 {
-    public GameObject panelPrefab; // Panel Prefab'ý
+    public GameObject buildPanelPrefab; // Panel Prefab'ý
+    public GameObject researchPanelPrefab; // Panel Prefab'ý
+    public GameObject soldierCreationPanelPrefab;
+    public GameObject SoldierHealPanelPrefab;
     public Transform panelContainer; // Vertical Layout Group'un olduðu GameObject
 
     private List<GameObject> activePanels = new List<GameObject>();
@@ -17,43 +20,244 @@ public class PanelManager : MonoBehaviour
     
 
     // Yeni bir panel oluþtur
-    public void CreatePanel(string panelId, string panelText, float buildTime)
+    public void CreatePanel(string panelId, string panelText, float buildTime,string processType)
     {
-        GameObject newPanel = Instantiate(panelPrefab, panelContainer);
-
-        Image img = newPanel.transform.Find("ProcessImage").GetComponent<Image>();
-        TextMeshProUGUI tmp = newPanel.transform.Find("BuildNameText").GetComponent<TextMeshProUGUI>();
-        Sprite sprite = Resources.Load<Sprite>("Buildings/" + panelText);
-
-        if (img != null && tmp != null)
+        if(processType == "Building")
         {
-            img.sprite = sprite;
-            tmp.text = panelText;
+            GameObject newPanel = Instantiate(buildPanelPrefab, panelContainer);
+
+            Image img = newPanel.transform.Find("ProcessImage").GetComponent<Image>();
+            TextMeshProUGUI tmp = newPanel.transform.Find("BuildNameText").GetComponent<TextMeshProUGUI>();
+            Image background = newPanel.transform.Find("Background").GetComponent<Image>();
+            Sprite sprite = Resources.Load<Sprite>("Buildings/" + panelText);
+
+
+            if (background == null)
+            {
+                Debug.Log("Background bulunamadý");
+            }
+            else
+            {
+                Image bar = background.transform.Find("Bar").GetComponent<Image>();
+
+                if (bar == null)
+                {
+                    Debug.Log("Bar bulunamadý");
+                }
+                else
+                {
+
+                    LeanTween.scaleX(bar.gameObject, 1, buildTime).setOnComplete(() => DestroyPanel(panelId));
+                }
+            }
+
+            if (img != null && tmp != null)
+            {
+                img.sprite = sprite;
+                tmp.text = panelText;
+            }
+
+            if (panelDictionary.ContainsKey(panelId))
+            {
+                Debug.LogWarning($"Panel ID zaten mevcut: {panelId}");
+                Destroy(newPanel); // Ayný ID için birden fazla panel oluþmasýný engelle
+                return;
+            }
+
+            panelDictionary.Add(panelId, newPanel); // Paneli ID ile iliþkilendir
+
+            // Paneli aktifleþtir/deaktif et
+            if (OpenProcessPanelWithAnim.isPanelActive)
+            {
+                activePanels.Add(newPanel);
+                Debug.Log($"Panel '{panelId}' aktif.");
+            }
+            else
+            {
+                deactivePanels.Add(newPanel);
+                newPanel.SetActive(false);
+                Debug.Log($"Panel '{panelId}' pasif.");
+            }
+
+            Debug.Log($"Aktif Panel Sayýsý: {activePanels.Count}, Deaktif Panel Sayýsý: {deactivePanels.Count}");
+        }
+       
+        else if(processType == "Researching")
+        {
+            GameObject newPanel = Instantiate(researchPanelPrefab, panelContainer);
+
+            Image img = newPanel.transform.Find("ProcessImage").GetComponent<Image>();
+            TextMeshProUGUI tmp = newPanel.transform.Find("ResearchNameText").GetComponent<TextMeshProUGUI>();
+            Image background = newPanel.transform.Find("Background").GetComponent<Image>();
+            Sprite sprite = Resources.Load<Sprite>("Researches/" + panelId);
+
+            if (background == null)
+            {
+                Debug.Log("Background bulunamadý");
+            }
+            else
+            {
+                Image bar = background.transform.Find("Bar").GetComponent<Image>();
+
+                if (bar == null)
+                {
+                    Debug.Log("Bar bulunamadý");
+                }
+                else
+                {
+
+                    LeanTween.scaleX(bar.gameObject, 1, buildTime).setOnComplete(() => DestroyPanel(panelId));
+                }
+            }
+
+            if (img != null && tmp != null)
+            {
+                img.sprite = sprite;
+                tmp.text = panelText;
+            }
+
+            if (panelDictionary.ContainsKey(panelId))
+            {
+                Debug.LogWarning($"Panel ID zaten mevcut: {panelId}");
+                Destroy(newPanel); // Ayný ID için birden fazla panel oluþmasýný engelle
+                return;
+            }
+
+            panelDictionary.Add(panelId, newPanel); // Paneli ID ile iliþkilendir
+
+            // Paneli aktifleþtir/deaktif et
+            if (OpenProcessPanelWithAnim.isPanelActive)
+            {
+                activePanels.Add(newPanel);
+                Debug.Log($"Panel '{panelId}' aktif.");
+            }
+            else
+            {
+                deactivePanels.Add(newPanel);
+                newPanel.SetActive(false);
+                Debug.Log($"Panel '{panelId}' pasif.");
+            }
+
+            Debug.Log($"Aktif Panel Sayýsý: {activePanels.Count}, Deaktif Panel Sayýsý: {deactivePanels.Count}");
         }
 
-        if (panelDictionary.ContainsKey(panelId))
+        else if(processType == "SoldierCreation")
         {
-            Debug.LogWarning($"Panel ID zaten mevcut: {panelId}");
-            Destroy(newPanel); // Ayný ID için birden fazla panel oluþmasýný engelle
-            return;
+            GameObject newPanel = Instantiate(soldierCreationPanelPrefab, panelContainer);
+
+            Image img = newPanel.transform.Find("ProcessImage").GetComponent<Image>();
+            TextMeshProUGUI tmp = newPanel.transform.Find("SoldierAmountText").GetComponent<TextMeshProUGUI>();
+            Image background = newPanel.transform.Find("Background").GetComponent<Image>();
+            Sprite sprite = Resources.Load<Sprite>("Military/SoldierCreation");
+
+            if (background == null)
+            {
+                Debug.Log("Background bulunamadý");
+            }
+            else
+            {
+                Image bar = background.transform.Find("Bar").GetComponent<Image>();
+
+                if (bar == null)
+                {
+                    Debug.Log("Bar bulunamadý");
+                }
+                else
+                {
+
+                    LeanTween.scaleX(bar.gameObject, 1, buildTime).setOnComplete(() => DestroyPanel(panelId));
+                }
+            }
+
+            if (img != null && tmp != null)
+            {
+                img.sprite = sprite;
+                tmp.text = panelText;
+            }
+
+            if (panelDictionary.ContainsKey(panelId))
+            {
+                Debug.LogWarning($"Panel ID zaten mevcut: {panelId}");
+                Destroy(newPanel); // Ayný ID için birden fazla panel oluþmasýný engelle
+                return;
+            }
+
+            panelDictionary.Add(panelId, newPanel); // Paneli ID ile iliþkilendir
+
+            // Paneli aktifleþtir/deaktif et
+            if (OpenProcessPanelWithAnim.isPanelActive)
+            {
+                activePanels.Add(newPanel);
+                Debug.Log($"Panel '{panelId}' aktif.");
+            }
+            else
+            {
+                deactivePanels.Add(newPanel);
+                newPanel.SetActive(false);
+                Debug.Log($"Panel '{panelId}' pasif.");
+            }
+
+            Debug.Log($"Aktif Panel Sayýsý: {activePanels.Count}, Deaktif Panel Sayýsý: {deactivePanels.Count}");
         }
 
-        panelDictionary.Add(panelId, newPanel); // Paneli ID ile iliþkilendir
-
-        // Paneli aktifleþtir/deaktif et
-        if (OpenProcessPanelWithAnim.isPanelActive)
+        else if (processType == "HealSoldier")
         {
-            activePanels.Add(newPanel);
-            Debug.Log($"Panel '{panelId}' aktif.");
-        }
-        else
-        {
-            deactivePanels.Add(newPanel);
-            newPanel.SetActive(false);
-            Debug.Log($"Panel '{panelId}' pasif.");
-        }
+            GameObject newPanel = Instantiate(SoldierHealPanelPrefab, panelContainer);
 
-        Debug.Log($"Aktif Panel Sayýsý: {activePanels.Count}, Deaktif Panel Sayýsý: {deactivePanels.Count}");
+            Image img = newPanel.transform.Find("ProcessImage").GetComponent<Image>();
+            TextMeshProUGUI tmp = newPanel.transform.Find("HealedSoldierAmountText").GetComponent<TextMeshProUGUI>();
+            Image background = newPanel.transform.Find("Background").GetComponent<Image>();
+            Sprite sprite = Resources.Load<Sprite>("Military/HealSoldier");
+
+            if (background == null)
+            {
+                Debug.Log("Background bulunamadý");
+            }
+            else
+            {
+                Image bar = background.transform.Find("Bar").GetComponent<Image>();
+
+                if (bar == null)
+                {
+                    Debug.Log("Bar bulunamadý");
+                }
+                else
+                {
+
+                    LeanTween.scaleX(bar.gameObject, 1, buildTime).setOnComplete(() => DestroyPanel(panelId));
+                }
+            }
+
+            if (img != null && tmp != null)
+            {
+                img.sprite = sprite;
+                tmp.text = panelText;
+            }
+
+            if (panelDictionary.ContainsKey(panelId))
+            {
+                Debug.LogWarning($"Panel ID zaten mevcut: {panelId}");
+                Destroy(newPanel); // Ayný ID için birden fazla panel oluþmasýný engelle
+                return;
+            }
+
+            panelDictionary.Add(panelId, newPanel); // Paneli ID ile iliþkilendir
+
+            // Paneli aktifleþtir/deaktif et
+            if (OpenProcessPanelWithAnim.isPanelActive)
+            {
+                activePanels.Add(newPanel);
+                Debug.Log($"Panel '{panelId}' aktif.");
+            }
+            else
+            {
+                deactivePanels.Add(newPanel);
+                newPanel.SetActive(false);
+                Debug.Log($"Panel '{panelId}' pasif.");
+            }
+
+            Debug.Log($"Aktif Panel Sayýsý: {activePanels.Count}, Deaktif Panel Sayýsý: {deactivePanels.Count}");
+        }
     }
 
     // Paneli yok et

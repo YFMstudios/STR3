@@ -28595,7 +28595,6 @@ GameObject:
   - component: {fileID: 658177488}
   - component: {fileID: 658177491}
   - component: {fileID: 658177492}
-  - component: {fileID: 658177493}
   m_Layer: 5
   m_Name: ProcessPanels
   m_TagString: Untagged
@@ -28721,36 +28720,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 0
---- !u!114 &658177493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 658177485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Content: {fileID: 658177486}
-  m_Horizontal: 0
-  m_Vertical: 1
-  m_MovementType: 1
-  m_Elasticity: 0.1
-  m_Inertia: 1
-  m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 0}
-  m_HorizontalScrollbar: {fileID: 0}
-  m_VerticalScrollbar: {fileID: 0}
-  m_HorizontalScrollbarVisibility: 0
-  m_VerticalScrollbarVisibility: 0
-  m_HorizontalScrollbarSpacing: 0
-  m_VerticalScrollbarSpacing: 0
-  m_OnValueChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &661674774
 GameObject:
   m_ObjectHideFlags: 0
@@ -75842,7 +75811,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fc03fbddaab7f44da92b48695b49305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelPrefab: {fileID: 1112417705380829967, guid: 3495767ec5ebd454c946de095ff34a6b, type: 3}
+  buildPanelPrefab: {fileID: 1112417705380829967, guid: 3495767ec5ebd454c946de095ff34a6b, type: 3}
+  researchPanelPrefab: {fileID: 1112417705380829967, guid: 7df09754456719e4683cd749762f503a, type: 3}
+  soldierCreationPanelPrefab: {fileID: 1112417705380829967, guid: e89b8301565fc4a4b802d3f603a87e9e, type: 3}
+  SoldierHealPanelPrefab: {fileID: 1112417705380829967, guid: 71222d8b5f9828a4085555670015c69e, type: 3}
   panelContainer: {fileID: 658177486}
 --- !u!4 &1735794292
 Transform:
@@ -80158,10 +80130,10 @@ MonoBehaviour:
   - {fileID: 2002266003}
   - {fileID: 1623467342}
   - {fileID: 594117893}
-  duration: 3
   progressBarController: {fileID: 250818655}
   createLabButton: {fileID: 1608911805}
   researchController: {fileID: 1774118553}
+  panelManager: {fileID: 1735794291}
 --- !u!4 &1832603466
 Transform:
   m_ObjectHideFlags: 0

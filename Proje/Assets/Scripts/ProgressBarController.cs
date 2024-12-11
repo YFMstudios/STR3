@@ -131,6 +131,7 @@ public class ProgressBarController : MonoBehaviour
                         buttonText.text = "Eðit";
                         giveCostBack(slider.savasciSlider.value, slider.okcuSlider.value, slider.mizrakciSlider.value);
                         LeanTween.cancel(progressBar);
+                        panelManager.DestroyPanel("SoldierCreation");
                         isUnitCreationActive = false;
                         // Progress bar'ý sýfýrla
                         ResetProgressBar(progressBar);
@@ -151,6 +152,7 @@ public class ProgressBarController : MonoBehaviour
                                 ResetProgressBar(progressBar); // Progress bar'ý sýfýrlamak için çaðýr
                                isUnitCreationActive = false;
                             });
+                        panelManager.CreatePanel("SoldierCreation", totalUnitAmount.ToString(), totalTime, "SoldierCreation");
                     }
                 }
             }
@@ -222,21 +224,24 @@ public class ProgressBarController : MonoBehaviour
             if (Hospital.wasHospitalCreated == true)
             {
                 float totalHealTime = 0; // Toplam iyileþtirme süresi
-
+                int totalHealedUnitaAmount = 0;
                 // HastaneSlider deðerlerini kontrol et
                 if (hastaneSlider.savasciSlider.value > 0)
                 {
                     totalHealTime += hastaneSlider.savasciSlider.value * savasciHealTime;
+                    totalHealedUnitaAmount += (int)hastaneSlider.savasciSlider.value;
                 }
 
                 if (hastaneSlider.okcuSlider.value > 0)
                 {
                     totalHealTime += hastaneSlider.okcuSlider.value * okcuHealTime;
+                    totalHealedUnitaAmount += (int)hastaneSlider.okcuSlider.value;
                 }
 
                 if (hastaneSlider.mizrakciSlider.value > 0)
                 {
                     totalHealTime += hastaneSlider.mizrakciSlider.value * mizrakciHealTime;
+                    totalHealedUnitaAmount += (int)hastaneSlider.mizrakciSlider.value;
                 }
 
                 // Toplam iyileþtirme süresi sýfýrdan büyükse progress bar'ý güncelle
@@ -253,6 +258,7 @@ public class ProgressBarController : MonoBehaviour
                         healButtonText.text = "Ýyileþtir";
                         giveCostBack(hastaneSlider.savasciSlider.value, hastaneSlider.okcuSlider.value, hastaneSlider.mizrakciSlider.value);
                         LeanTween.cancel(healProgressBar);
+                        panelManager.DestroyPanel("HealSoldier");
                         // Progress bar'ý sýfýrla
                         isHealActive = false;
                         ResetProgressBar(healProgressBar);
@@ -274,6 +280,7 @@ public class ProgressBarController : MonoBehaviour
                                 isHealActive = false;
 
                             });
+                        panelManager.CreatePanel("HealSoldier",totalHealedUnitaAmount.ToString(), totalHealTime, "HealSoldier");
                     }
                 }
             }
@@ -306,7 +313,7 @@ public class ProgressBarController : MonoBehaviour
         string panelName = "WareHouseBuildingProcessPanel";
         // LeanTween animasyonu baþlat
         LeanTween.scaleX(buildWareHouseBar, 1, warehouse.buildTime).setOnComplete(() => ResetProgressBar(buildWareHouseBar));
-        panelManager.CreatePanel(panelName, warehouse.buildingName, warehouse.buildTime);
+        panelManager.CreatePanel(panelName, warehouse.buildingName, warehouse.buildTime, "Building");
 
         isWareHouseBuildingActive = true;
         float elapsedTime = 0f; // Geçen zamaný takip et
@@ -352,7 +359,7 @@ public class ProgressBarController : MonoBehaviour
 
         // LeanTween animasyonu baþlat
         LeanTween.scaleX(buildStonepitBar, 1, stonepit.buildTime).setOnComplete(() => ResetProgressBar(buildStonepitBar));
-        panelManager.CreatePanel(panelName,stonepit.buildingName,stonepit.buildTime);
+        panelManager.CreatePanel(panelName,stonepit.buildingName,stonepit.buildTime, "Building");
         isStonePitBuildingActive = true;
         float elapsedTime = 0f; // Geçen zamaný takip et
 
@@ -395,7 +402,7 @@ public class ProgressBarController : MonoBehaviour
         // LeanTween animasyonu baþlat
         LeanTween.scaleX(buildSawmillBar, 1, sawmill.buildTime).setOnComplete(() => ResetProgressBar(buildSawmillBar));
         string panelName = "SawmillBuildingProcessPanel";
-        panelManager.CreatePanel(panelName, sawmill.buildingName, sawmill.buildTime);
+        panelManager.CreatePanel(panelName, sawmill.buildingName, sawmill.buildTime, "Building");
         isSawmillBuildingActive = true;
 
         float elapsedTime = 0f; // Geçen zamaný takip et
@@ -450,7 +457,7 @@ public class ProgressBarController : MonoBehaviour
         isFarmBuildActive = true;
 
         string panelName = "FarmBuildingProcessPanel";
-        panelManager.CreatePanel(panelName, farm.buildingName, farm.buildTime);
+        panelManager.CreatePanel(panelName, farm.buildingName, farm.buildTime, "Building");
 
         float elapsedTime = 0f; // Geçen zamaný takip et
 
@@ -499,7 +506,7 @@ public class ProgressBarController : MonoBehaviour
         isBlacksmithBuildingActive = true;
 
         string panelName = "BlacksmithBuildingProcessPanel";
-        panelManager.CreatePanel(panelName, blacksmith.buildingName, blacksmith.buildTime);
+        panelManager.CreatePanel(panelName, blacksmith.buildingName, blacksmith.buildTime, "Building");
 
         float elapsedTime = 0f; // Geçen zamaný takip et
 
@@ -553,7 +560,7 @@ public class ProgressBarController : MonoBehaviour
         isLabBuildActive = true;
 
         string panelName = "LabBuildingProcessPanel";
-        panelManager.CreatePanel(panelName, lab.buildingName, lab.buildTime);
+        panelManager.CreatePanel(panelName, lab.buildingName, lab.buildTime, "Building");
 
         float elapsedTime = 0f; // Geçen zamaný takip et
 
@@ -606,7 +613,7 @@ public class ProgressBarController : MonoBehaviour
         isBarracksBuildActive = true;
 
         string panelName = "BarracksBuildingProcessPanel";
-        panelManager.CreatePanel(panelName, barracks.buildingName, barracks.buildTime);
+        panelManager.CreatePanel(panelName, barracks.buildingName, barracks.buildTime, "Building");
 
         float elapsedTime = 0f; // Geçen zamaný takip et
 
@@ -659,7 +666,7 @@ public class ProgressBarController : MonoBehaviour
         isHospitalBuildActive = true;
 
         string panelName = "HospitalBuildingProcessPanel";
-        panelManager.CreatePanel(panelName, hospital.buildingName, hospital.buildTime);
+        panelManager.CreatePanel(panelName, hospital.buildingName, hospital.buildTime, "Building");
 
         float elapsedTime = 0f; // Geçen zamaný takip et
 
@@ -705,7 +712,7 @@ public class ProgressBarController : MonoBehaviour
 
 
         string panelName = "CastleUpgradeProcessPanel";
-        panelManager.CreatePanel(panelName, castle.buildingName, castle.buildTime);
+        panelManager.CreatePanel(panelName, castle.buildingName, castle.buildTime, "Building");
 
         float elapsedTime = 0f; // Geçen zamaný takip et
 
@@ -756,7 +763,7 @@ public class ProgressBarController : MonoBehaviour
             isTowerBuildingActive = true;
 
             string panelName = "TowerBuildingProcessPanel";  
-            panelManager.CreatePanel(panelName, tower.buildingName, tower.buildTime);
+            panelManager.CreatePanel(panelName, tower.buildingName, tower.buildTime, "Building");
 
             float elapsedTime = 0f; // Geçen zamaný takip et
 
@@ -807,7 +814,7 @@ public class ProgressBarController : MonoBehaviour
             isAnyTrapActive = true;
 
             string panelName = "TrapBuildingProcessPanel";
-            panelManager.CreatePanel(panelName, trap.buildingName, trap.buildTime);
+            panelManager.CreatePanel(panelName, trap.buildingName, trap.buildTime, "Building");
 
         float elapsedTime = 0f; // Geçen zamaný takip et
 
