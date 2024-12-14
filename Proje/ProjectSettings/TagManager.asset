@@ -3,12 +3,19 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ground
+  - Enemy
+  - EnemyMinion
+  - EnemyTurret
+  - AllyMinion
+  - AllyTurret
+  - Trap
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Fence
   - Water
   - UI
   - 
