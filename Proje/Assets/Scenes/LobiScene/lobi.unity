@@ -4805,7 +4805,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7738640270672855682, guid: 7112f7e4a8c84634cbc4abdda87e4ccc, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7738640270672855682, guid: 7112f7e4a8c84634cbc4abdda87e4ccc, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -4817,7 +4817,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7738640270672855682, guid: 7112f7e4a8c84634cbc4abdda87e4ccc, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: JoinRoom
+      value: RefreshCachedRoomList
       objectReference: {fileID: 0}
     - target: {fileID: 7738640270672855682, guid: 7112f7e4a8c84634cbc4abdda87e4ccc, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
