@@ -7,9 +7,15 @@ using Photon.Realtime;
 public class RoomHostManager : MonoBehaviourPunCallbacks
 {
     public Button startButton; // Başlat butonu referansı
-    public int targetSceneIndex = 6; // Geçiş yapılacak sahnenin indexi (örn. 6)
+    public int targetSceneIndex = 6; // Geçiş yapılacak sahnenin indexi
 
     private List<Player> playerList = new List<Player>(); // Oyuncuları tutacak liste
+
+    void Awake()
+    {
+        // Sahne senkronizasyonunu etkinleştir
+        PhotonNetwork.AutomaticallySyncScene = true;
+    }
 
     void Start()
     {
@@ -76,7 +82,7 @@ public class RoomHostManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            // Tüm oyuncuları hedef sahneye yönlendir
+            // Oda sahibiysek, odadaki tüm oyuncuları aynı sahneye yönlendirelim
             PhotonNetwork.LoadLevel(targetSceneIndex);
         }
         else
@@ -86,44 +92,42 @@ public class RoomHostManager : MonoBehaviourPunCallbacks
     }
 
     // Yeni oda sahibini belirle
-private void AssignNewMaster()
-{
-    if (PhotonNetwork.CurrentRoom.Players.Count > 0)
+    private void AssignNewMaster()
     {
-        Player currentMaster = PhotonNetwork.MasterClient;
-
-        // Eğer mevcut oda sahibi bizsek, butonu güncelle ve çık
-        if (currentMaster == PhotonNetwork.LocalPlayer)
+        if (PhotonNetwork.CurrentRoom.Players.Count > 0)
         {
-            Debug.Log("Zaten oda sahibiyim. Buton güncelleniyor.");
-            UpdateStartButton();
-            return;
-        }
+            Player currentMaster = PhotonNetwork.MasterClient;
 
-        // Yeni oda sahibini kontrol et
-        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
-        {
-            if (player.IsMasterClient)
+            // Eğer mevcut oda sahibi bizsek, butonu güncelle ve çık
+            if (currentMaster == PhotonNetwork.LocalPlayer)
             {
-                Debug.Log($"Yeni oda sahibi otomatik atanmış: {player.NickName}");
-                UpdateStartButton(); // Buton durumunu güncelle
+                Debug.Log("Zaten oda sahibiyim. Buton güncelleniyor.");
+                UpdateStartButton();
                 return;
+            }
+
+            // Yeni oda sahibini kontrol et
+            foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
+            {
+                if (player.IsMasterClient)
+                {
+                    Debug.Log($"Yeni oda sahibi otomatik atanmış: {player.NickName}");
+                    UpdateStartButton(); // Buton durumunu güncelle
+                    return;
+                }
+            }
+
+            // Eğer otomatik atanmadıysa manuel olarak ilk oyuncuyu ata (çok nadir bir durum)
+            var firstPlayer = PhotonNetwork.CurrentRoom.Players.Values.GetEnumerator();
+            if (firstPlayer.MoveNext())
+            {
+                Player newMaster = firstPlayer.Current;
+                PhotonNetwork.SetMasterClient(newMaster);
+                Debug.Log($"Yeni oda sahibi manuel olarak atandı: {newMaster.NickName}");
             }
         }
 
-        // Eğer otomatik atanmadıysa manuel olarak ilk oyuncuyu ata (çok nadir bir durum)
-        var firstPlayer = PhotonNetwork.CurrentRoom.Players.Values.GetEnumerator();
-        if (firstPlayer.MoveNext())
-        {
-            Player newMaster = firstPlayer.Current;
-            PhotonNetwork.SetMasterClient(newMaster);
-            Debug.Log($"Yeni oda sahibi manuel olarak atandı: {newMaster.NickName}");
-        }
+        // Buton durumunu güncelle
+        UpdateStartButton();
     }
-
-    // Buton durumunu güncelle
-    UpdateStartButton();
-}
-
-
 }

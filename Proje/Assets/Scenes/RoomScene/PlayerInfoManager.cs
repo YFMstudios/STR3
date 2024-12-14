@@ -1,111 +1,68 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using Photon.Pun;
-using Photon.Realtime;
 using ExitGames.Client.Photon; // Photon'un Hashtable kullanımı için
-using System.Collections.Generic;
+using UnityEngine.SceneManagement;  // Sahne değiştirme için
+using TMPro;
 
 public class PlayerInfoManager : MonoBehaviourPunCallbacks
 {
     // UI Bileşenleri
     public TMP_InputField playerNameInputField; // Kullanıcı ismi için InputField
-    public TMP_Dropdown kingdomDropdown;       // Krallık seçimi için Dropdown
-    public GameObject inputPanel;             // Panelin referansı
-
-    // Sabit krallıklar
-    private readonly List<string> allKingdoms = new List<string> {
-        "AKHADZRİA", "ALFGARD", "ARİANAPOL", "DHAMURON", "LEXİON", "ZEPHYRİON"
-    };
-
+    public Button kingdomButton;                // Krallık seçimi için buton
+    public GameObject inputPanel;               // Panelin referansı
+    public Button enterButton; // Enter butonunun referansı
     private void Start()
+{
+    // Başlangıçta Krallık butonunu ve InputField'ı görünür yapalım
+    kingdomButton.gameObject.SetActive(true);
+    playerNameInputField.gameObject.SetActive(true);
+    
+    // Krallık butonuna tıklama olayı ekle
+    kingdomButton.onClick.AddListener(OnKingdomButtonPressed);
+
+    // Enter butonuna tıklama olayı ekle
+    enterButton.onClick.AddListener(OnEnterButtonPressed);
+}
+
+    public void OnKingdomButtonPressed()
     {
-        // Kullanılabilir krallıkları başlat ve Dropdown'u güncelle
-        UpdateAvailableKingdoms();
-        PopulateKingdomDropdown();
+        // 4. ekrana geçiş için sahne değişimi yap
+        SceneManager.LoadScene(4);
+
+        // Butonu gizle
+        kingdomButton.gameObject.SetActive(false);
     }
 
-    private void PopulateKingdomDropdown()
+  public void OnEnterButtonPressed()
+{
+    // Kullanıcı ismini al
+    string playerName = playerNameInputField.text;
+
+    // Boş isim kontrolü
+    if (string.IsNullOrWhiteSpace(playerName))
     {
-        // Var olan seçenekleri temizle
-        kingdomDropdown.ClearOptions();
-
-        // Kullanılabilir krallıkları Dropdown'a ekle
-        kingdomDropdown.AddOptions(allKingdoms);
-
-        // Varsayılan bir seçim yap
-        if (allKingdoms.Count > 0)
-        {
-            kingdomDropdown.value = 0;
-            kingdomDropdown.RefreshShownValue();
-        }
+        Debug.LogWarning("Kullanıcı adı boş bırakılamaz!");
+        return;
     }
 
-    private void UpdateAvailableKingdoms()
-    {
-        // Mevcut oyuncuların seçtiği krallıkları al
-        HashSet<string> selectedKingdoms = new HashSet<string>();
+    // CheckScene scriptinden krallık bilgisini al
+    string selectedKingdom = CheckScene.selectedKingdom;
 
-        foreach (Player player in PhotonNetwork.PlayerList)
-        {
-            if (player.CustomProperties.ContainsKey("Kingdom"))
-            {
-                string selectedKingdom = player.CustomProperties["Kingdom"].ToString();
-                selectedKingdoms.Add(selectedKingdom);
-            }
-        }
+    // Kullanıcı adı ve krallık bilgisiyle birlikte Photon'a gönder
+    var customProperties = new Hashtable();
+    customProperties["Kingdom"] = selectedKingdom;  // Krallık bilgisini ekle
+    customProperties["PlayerName"] = playerName;    // Kullanıcı adını ekle
+    PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
 
-        // Tüm krallık listesinden seçilenleri çıkar
-        allKingdoms.RemoveAll(kingdom => selectedKingdoms.Contains(kingdom));
-    }
+    // Paneli kapat
+    inputPanel.SetActive(false);
 
-    public void OnEnterButtonPressed()
-    {
-        // Kullanıcı ismini ve krallığını al
-        string playerName = playerNameInputField.text;
-        string selectedKingdom = kingdomDropdown.options[kingdomDropdown.value].text;
+    // Debug: Photon'a gönderilen bilgileri yazdır
+    Debug.Log($"Photon'a gönderilen bilgiler: Kingdom = {selectedKingdom}, PlayerName = {playerName}");
 
-        // Boş isim kontrolü
-        if (string.IsNullOrWhiteSpace(playerName))
-        {
-            Debug.LogWarning("Kullanıcı adı boş bırakılamaz!");
-            return;
-        }
+    
+}
 
-        // Photon üzerinden bilgileri gönder
-        PhotonNetwork.NickName = playerName; // Photon'da kullanıcı adı olarak ayarla
 
-        // Kullanıcıya özel krallık bilgisini ekle
-        var customProperties = new Hashtable();
-        customProperties["Kingdom"] = selectedKingdom;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
-
-        // Paneli kapat
-        inputPanel.SetActive(false);
-
-        // Debug için bilgileri yazdır
-        Debug.Log($"Kullanıcı adı: {playerName}, Krallık: {selectedKingdom}");
-    }
-
-    // Photon Callback: Bir oyuncu odaya katıldığında
-    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-    {
-        if (changedProps.ContainsKey("Kingdom"))
-        {
-            // Kullanılabilir krallıkları güncelle ve Dropdown'u yenile
-            UpdateAvailableKingdoms();
-            PopulateKingdomDropdown();
-        }
-    }
-
-    // Photon Callback: Bir oyuncu odayı terk ettiğinde
-    public override void OnPlayerLeftRoom(Player otherPlayer)
-    {
-        if (otherPlayer.CustomProperties.ContainsKey("Kingdom"))
-        {
-            // Kullanılabilir krallıkları güncelle ve Dropdown'u yenile
-            UpdateAvailableKingdoms();
-            PopulateKingdomDropdown();
-        }
-    }
 }

@@ -36,15 +36,27 @@ private IEnumerator UpdatePlayerData()
                     continue;
                 }
 
-                // Krallık bilgisi al
+                // CustomProperties'den oyuncu adı çekiliyor
+                string playerName = player.CustomProperties.ContainsKey("PlayerName")
+                    ? player.CustomProperties["PlayerName"].ToString()
+                    : "Unnamed Player";
+
+                // Krallık bilgisi alınıyor
                 string kingdom = player.CustomProperties.ContainsKey("Kingdom")
                     ? player.CustomProperties["Kingdom"].ToString()
                     : "Unknown";
 
+                // Debug log ile kontrol ediliyor
+                Debug.Log($"Oyuncu Adı: {playerName}, Krallık: {kingdom}");
+
+
+                // Debug log ekleyerek kontrol et
+                Debug.Log($"Oyuncu Adı: {playerName}, Krallık: {kingdom}");
+
                 // Bilgiler eksikse prefab oluşturmayı atla
                 if (kingdom == "Unknown")
                 {
-                    Debug.Log($"Krallık bilgisi eksik, prefab oluşturulmadı: {player.NickName}");
+                    Debug.Log($"Krallık bilgisi eksik, prefab oluşturulmadı: {playerName}");
                     continue;
                 }
 
@@ -52,7 +64,7 @@ private IEnumerator UpdatePlayerData()
                 if (playerObjects.ContainsKey(player.ActorNumber))
                 {
                     var playerDisplay = playerObjects[player.ActorNumber].GetComponent<PlayerInfoDisplay>();
-                    playerDisplay.UpdateInfo(player.NickName, kingdom);
+                    playerDisplay.UpdateInfo(playerName, kingdom);
                 }
                 else
                 {
@@ -62,6 +74,10 @@ private IEnumerator UpdatePlayerData()
                     playerObjects[player.ActorNumber] = playerObject;
                     playerOrder.Add(player.ActorNumber);
                     UpdatePrefabPositions();
+
+                    // Prefab'ın ilk verilerini ayarla
+                    var playerDisplay = playerObject.GetComponent<PlayerInfoDisplay>();
+                    playerDisplay.UpdateInfo(playerName, kingdom);
                 }
             }
         }
@@ -69,6 +85,7 @@ private IEnumerator UpdatePlayerData()
         yield return new WaitForSeconds(1f); // 1 saniyede bir güncelle
     }
 }
+
 
 
 

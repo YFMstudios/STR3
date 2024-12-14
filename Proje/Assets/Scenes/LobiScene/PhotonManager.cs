@@ -35,19 +35,59 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     private Coroutine refreshCoroutine;
     void Start()
+{
+    // PhotonNetwork'e bağlanmaya çalışıyoruz
+    if (!PhotonNetwork.IsConnected)
     {
-        if (!PhotonNetwork.IsConnected)
+        PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.GameVersion = "1.0"; // Versiyon kontrolü
+        Debug.Log("Photon'a bağlanılıyor...");
+    }
+    else if (PhotonNetwork.IsConnected && !PhotonNetwork.InLobby)
+    {
+        // Eğer bağlıysak ama lobiye katılmadıysak, lobiye katıl
+        PhotonNetwork.JoinLobby();
+    }
+    else
+    {
+        // Eğer zaten lobiye katılınmışsa, oda listesini yenile
+        RefreshRoomList();
+    }
+}
+
+public override void OnConnectedToMaster()
+{
+    // Bağlantı tamamlandı ve lobiye katılmaya hazır
+    if (PhotonNetwork.IsConnectedAndReady)
+    {
+        Debug.Log("Lobiye başarıyla katıldınız!");
+
+        // Oda oluşturma işlemi
+        if (isCreatingRoom && !string.IsNullOrEmpty(roomNameToCreate))
         {
-            PhotonNetwork.ConnectUsingSettings();
-            PhotonNetwork.GameVersion = "1.0"; // Versiyon kontrolü
-            Debug.Log("Photon'a bağlanılıyor...");
+            CreateRoomInternal(roomNameToCreate);
+            isCreatingRoom = false;
+            roomNameToCreate = null;
+        }
+
+        // Oda listesini güncelleme veya yenileme işlemi
+        if (shouldRefreshRoomList)
+        {
+            shouldRefreshRoomList = false;
+            RefreshCachedRoomList();
         }
         else
         {
-            // Eğer zaten bağlıysak, oda listesini yenile
             RefreshRoomList();
         }
     }
+    else
+    {
+        Debug.Log("Bağlantı henüz tamamlanmadı. Lobiye katılma işlemi başlatılmadı.");
+    }
+}
+
+
 
     private IEnumerator AutoRefreshRoomList()
 {
@@ -146,35 +186,8 @@ public new void OnDisable()
 }
 
 
-    public override void OnConnectedToMaster()
-    {
-        Debug.Log("Master Server'a bağlanıldı!");
-        PhotonNetwork.JoinLobby();
-    }
 
-    public override void OnJoinedLobby()
-    {
-        Debug.Log("Lobiye başarıyla katıldınız!");
 
-        if (isCreatingRoom && !string.IsNullOrEmpty(roomNameToCreate))
-        {
-            CreateRoomInternal(roomNameToCreate);
-            isCreatingRoom = false;
-            roomNameToCreate = null;
-        }
-
-        if (shouldRefreshRoomList)
-        {
-            shouldRefreshRoomList = false;
-            // Oda listesini güncelle ve yazdır
-            RefreshCachedRoomList();
-        }
-        else
-        {
-            // Oda listesini yenile
-            RefreshRoomList();
-        }
-    }
 
     public override void OnCreatedRoom()
     {
@@ -287,7 +300,7 @@ public new void OnDisable()
         }
     }
 
-    private void RefreshCachedRoomList()
+    public void RefreshCachedRoomList()
     {
         // Mevcut prefabları temizle
         foreach (GameObject entry in roomEntries)
@@ -301,51 +314,74 @@ public new void OnDisable()
             float yPosition = 0f;
 
             // Odaları sıralamak için (yeni odalar en alta eklensin)
-            for (int i = 0; i < cachedRoomList.Count; i++)
+          // Odaları sıralamak için (yeni odalar en alta eklensin)
+for (int i = 0; i < cachedRoomList.Count; i++)
+{
+    RoomInfo room = cachedRoomList[i];
+
+    // Oda numarası prefabını oluştur
+    GameObject roomNumberObj = Instantiate(roomNumberPrefab, contentParent);
+    roomNumberObj.GetComponent<TMP_Text>().text = room.Name.Split('_')[1]; // Oda numarası
+    roomNumberObj.transform.position = roomNumberPrefab.transform.position + new Vector3(0, -yPosition, 0);
+
+    // Oda ismi prefabını oluştur
+    GameObject roomNameObj = Instantiate(roomNamePrefab, contentParent);
+    roomNameObj.GetComponent<TMP_Text>().text = room.Name.Split('_')[0]; // Oda ismi
+    roomNameObj.transform.position = roomNamePrefab.transform.position + new Vector3(0, -yPosition, 0);
+
+    // Oyuncu sayısı prefabını oluştur
+    GameObject playerCountObj = Instantiate(playerCountPrefab, contentParent);
+    playerCountObj.GetComponent<TMP_Text>().text = $"{room.PlayerCount}/{room.MaxPlayers}";
+    playerCountObj.transform.position = playerCountPrefab.transform.position + new Vector3(0, -yPosition, 0);
+
+    // Odaya katılma butonu prefabını oluştur
+    GameObject joinButtonObj = Instantiate(roomJoinButtonPrefab, contentParent);
+    joinButtonObj.transform.position = roomJoinButtonPrefab.transform.position + new Vector3(0, -yPosition, 0);
+
+    // Butonu aktif hale getirin
+    joinButtonObj.SetActive(true);
+
+    // Butonun tıklama olayını ayarla
+    Button joinButton = joinButtonObj.GetComponent<Button>();
+    if (joinButton != null)
+    {
+        // Oda ismini doğru bir şekilde yakala
+        string roomNameCopy = room.Name; // Oda ismini tamamen alıyoruz
+        Debug.Log($"Join button oluşturuluyor. Oda ismi: {roomNameCopy}"); // Oda ismini logla
+
+        // Oda adı boşsa buton tıklama olayını ekleme
+        joinButton.onClick.AddListener(() =>
+        {
+            // Eğer oda adı boşsa giriş yapma işlemini iptal et
+            if (string.IsNullOrEmpty(roomNameCopy))
             {
-                RoomInfo room = cachedRoomList[i];
-
-                // Oda numarası prefabını oluştur
-                GameObject roomNumberObj = Instantiate(roomNumberPrefab, contentParent);
-                roomNumberObj.GetComponent<TMP_Text>().text = room.Name.Split('_')[1]; // Oda numarası
-                roomNumberObj.transform.position = roomNumberPrefab.transform.position + new Vector3(0, -yPosition, 0);
-
-                // Oda ismi prefabını oluştur
-                GameObject roomNameObj = Instantiate(roomNamePrefab, contentParent);
-                roomNameObj.GetComponent<TMP_Text>().text = room.Name.Split('_')[0]; // Oda ismi
-                roomNameObj.transform.position = roomNamePrefab.transform.position + new Vector3(0, -yPosition, 0);
-
-                // Oyuncu sayısı prefabını oluştur
-                GameObject playerCountObj = Instantiate(playerCountPrefab, contentParent);
-                playerCountObj.GetComponent<TMP_Text>().text = $"{room.PlayerCount}/{room.MaxPlayers}";
-                playerCountObj.transform.position = playerCountPrefab.transform.position + new Vector3(0, -yPosition, 0);
-
-                // Odaya katılma butonu prefabını oluştur
-                GameObject joinButtonObj = Instantiate(roomJoinButtonPrefab, contentParent);
-                joinButtonObj.transform.position = roomJoinButtonPrefab.transform.position + new Vector3(0, -yPosition, 0);
-
-                // Butonu aktif hale getirin
-                joinButtonObj.SetActive(true);
-
-                // Butonun tıklama olayını ayarla
-                Button joinButton = joinButtonObj.GetComponent<Button>();
-                if (joinButton != null)
-                {
-                    string roomNameCopy = room.Name; // Oda ismini yakala
-                    joinButton.onClick.AddListener(() => JoinRoom(roomNameCopy));
-                }
-                else
-                {
-                    Debug.LogWarning("Join Button bir Button bileşenine sahip değil.");
-                }
-
-                roomEntries.Add(roomNumberObj);
-                roomEntries.Add(roomNameObj);
-                roomEntries.Add(playerCountObj);
-                roomEntries.Add(joinButtonObj);
-
-                yPosition += yOffset; // Her satır için yOffset kadar aşağı kaydır
+                Debug.LogError("Oda adı boş olamaz! Giriş yapılmadı.");
+                return; // Oda adı boşsa işlem sonlandırılır
             }
+
+            // Odaya katılma işlemi
+            if (PhotonNetwork.JoinRoom(roomNameCopy))
+            {
+                Debug.Log("Odaya katılındı: " + roomNameCopy);
+            }
+            else
+            {
+                Debug.LogError("Odaya katılmak başarısız oldu.");
+            }
+        });
+    }
+    else
+    {
+        Debug.LogWarning("Join Button bir Button bileşenine sahip değil.");
+    }
+
+    roomEntries.Add(roomNumberObj);
+    roomEntries.Add(roomNameObj);
+    roomEntries.Add(playerCountObj);
+    roomEntries.Add(joinButtonObj);
+
+    yPosition += yOffset; // Her satır için yOffset kadar aşağı kaydır
+}
         }
         else
         {
@@ -353,25 +389,6 @@ public new void OnDisable()
         }
     }
 
-    public void JoinRoom(string roomName)
-    {
-        if (!PhotonNetwork.IsConnectedAndReady)
-        {
-            Debug.LogWarning("Sunucuya bağlı değilsiniz!");
-            return;
-        }
-
-        if (PhotonNetwork.InRoom)
-        {
-            Debug.LogWarning("Zaten bir odadasınız, önce odadan çıkılıyor.");
-            roomNameToJoin = roomName;
-            isJoiningRoom = true;
-            PhotonNetwork.LeaveRoom();
-            return;
-        }
-
-        PhotonNetwork.JoinRoom(roomName);
-    }
 
     public override void OnJoinedRoom()
     {
